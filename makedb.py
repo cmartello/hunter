@@ -93,6 +93,7 @@ for line in oracle.readlines():
         entry = dict()
         cardid += 1
         entline = 0
+        continue
 
     # if it doesn't match anything else, assume that it is card text
     entry['text'] = entry.get('text', '') + line + '\n'

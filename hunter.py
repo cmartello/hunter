@@ -84,8 +84,10 @@ class Hunter:
             regex = match(\
                 '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+$', line)
             if regex is not None:
-                entry['castcost'] = line
-                continue
+                # quick hack -- don't overwrite castcost with loyalty
+                if entry.get('castcost', None) == None:
+                    entry['castcost'] = line
+                    continue
 
             # check to see if the line identifies the type of the card
             # only do this if we haven't already

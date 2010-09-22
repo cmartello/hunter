@@ -1,6 +1,7 @@
 """hunter.py --- An alternative to WOTC's "Gatherer" """
 
 
+import sqlite3
 from re import search, match
 from sqlite3 import connect
 from sys import argv, exit
@@ -153,6 +154,13 @@ if __name__ == "__main__":
     test = Hunter(argv[1])
 
     # REPL for SQL statements
-    while 1:
+    user = ''
+    while user != 'exit':
         user = raw_input('> ')
-        pprint(test.dbase.execute(user).fetchall())
+        try:
+            results = test.dbase.execute(user).fetchall()
+        except sqlite3.OperationalError as e:
+            print 'sqlite3.OperationalError', e
+        else:
+            pprint(results)
+            print len(results), 'results'

@@ -129,7 +129,6 @@ class Hunter:
                     "','" + entry.get('toughness', '-') +\
                     "','" + entry.get('printings', '???') +\
                     "','" + entry.get('text', '') + "')")
-                self.dbase.commit()
 
                 #reset state, bump ID up
                 entry = dict()
@@ -139,6 +138,10 @@ class Hunter:
 
             # if the line doesn't match anything else, it's card text.
             entry['text'] = entry.get('text', '') + line + '\n'
+
+        # commit the table to the db
+        self.dbase.commit()
+
 
 
 if __name__ == "__main__":

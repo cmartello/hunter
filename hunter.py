@@ -4,6 +4,7 @@
 from re import search, match
 from sqlite3 import connect
 from sys import argv, exit
+from pprint import pprint
 
 
 class Hunter:
@@ -150,3 +151,8 @@ if __name__ == "__main__":
         exit(1)
 
     test = Hunter(argv[1])
+
+    # REPL for SQL statements
+    while 1:
+        user = raw_input('> ')
+        pprint(test.dbase.execute(user).fetchall())

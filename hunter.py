@@ -57,6 +57,7 @@ class Hunter:
                 cardid INTEGER PRIMARY KEY,
                 cardname TEXT,
                 castcost TEXT,
+                loyalty TEXT,
                 type TEXT,
                 power TEXT,
                 toughness TEXT,
@@ -86,9 +87,14 @@ class Hunter:
             regex = match(\
                 '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+$', line)
             if regex is not None:
-                # quick hack -- don't overwrite castcost with loyalty
-                if entry.get('castcost', None) == None:
+                # Don't overwrite casting cost if its already there
+                if entry.get('castcost') == None:
                     entry['castcost'] = line
+                    continue
+                # if we're dealing with a planeswalker and the line is just a 1 or 2 digit number,
+                # file that under loyalty.
+                elif entry.get('type')[:12] == 'Planeswalker' and match('^(\d{1,2})$', line) is not None:
+                    entry['loyalty'] = line
                     continue
 
             # check to see if the line identifies the type of the card
@@ -126,6 +132,7 @@ class Hunter:
                     str(cardid) +\
                     "','" + entry['cardname'] +\
                     "','" + entry.get('castcost', 'N/A') +\
+                    "','" + entry.get('loyalty', 'N/A') +\
                     "','" + entry['type'] +\
                     "','" + entry.get('power', '-') +\
                     "','" + entry.get('toughness', '-') +\

@@ -1,3 +1,7 @@
+*.zip
+attic/
+*.txt
+*.db
 *.pyc
 *.swp
 *~

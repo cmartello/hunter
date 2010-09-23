@@ -4,7 +4,7 @@
 import sqlite3
 from re import search, match
 from sqlite3 import connect
-from sys import argv, exit
+from sys import argv
 from pprint import pprint
 
 
@@ -91,9 +91,10 @@ class Hunter:
                 if entry.get('castcost') == None:
                     entry['castcost'] = line
                     continue
-                # if we're dealing with a planeswalker and the line is just a 1 or 2 digit number,
-                # file that under loyalty.
-                elif entry.get('type')[:12] == 'Planeswalker' and match('^(\d{1,2})$', line) is not None:
+                # if we're dealing with a planeswalker and the line is just 
+                # a 1 or 2 digit number, file that under loyalty.
+                elif entry.get('type')[:12] == 'Planeswalker' and \
+                match('^(\d{1,2})$', line) is not None:
                     entry['loyalty'] = line
                     continue
 
@@ -152,15 +153,15 @@ class Hunter:
         self.dbase.commit()
 
 
-def repl():
-    # REPL for SQL statements
+def repl(hobj):
+    """REPL for SQL statements.  Mostly for testing purposes."""
     user = ''
     while user != 'exit':
         user = raw_input('> ')
         try:
-            results = test.dbase.execute(user).fetchall()
-        except sqlite3.OperationalError as e:
-            print 'sqlite3.OperationalError', e
+            results = hobj.dbase.execute(user).fetchall()
+        except sqlite3.OperationalError as error:
+            print 'sqlite3.OperationalError', error
         else:
             pprint(results)
             print len(results), 'results'
@@ -171,6 +172,5 @@ if __name__ == "__main__":
         print "Usage: hunter.py file.txt\n"
         exit(1)
 
-    test = Hunter(argv[1])
-
+    TEST = Hunter(argv[1])
 

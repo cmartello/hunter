@@ -152,14 +152,7 @@ class Hunter:
         self.dbase.commit()
 
 
-
-if __name__ == "__main__":
-    if len(argv) != 2:
-        print "Usage: hunter.py file.txt\n"
-        exit(1)
-
-    test = Hunter(argv[1])
-
+def repl():
     # REPL for SQL statements
     user = ''
     while user != 'exit':
@@ -171,3 +164,13 @@ if __name__ == "__main__":
         else:
             pprint(results)
             print len(results), 'results'
+
+
+if __name__ == "__main__":
+    if len(argv) != 2:
+        print "Usage: hunter.py file.txt\n"
+        exit(1)
+
+    test = Hunter(argv[1])
+
+

@@ -49,7 +49,7 @@ class Hunter:
         # describes the type of the card
         types = set(['Artifact', 'Tribal', 'Legendary', 'Land', 'Snow',
             'Creature', 'Sorcery', 'Instant', 'Planeswalker',
-            'Enchantment', 'World', 'Basic', ''])
+            'Enchantment', 'World', 'Basic', '//', ''])
 
         # create the 'cards' table
         self.dbase.execute('''CREATE TABLE cards
@@ -85,13 +85,14 @@ class Hunter:
 
             # match a casting cost
             regex = match(\
-                '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+$', line)
+                '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+(| \/\/ (X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+)$', line)
             if regex is not None:
                 # Don't overwrite casting cost if its already there
                 if entry.get('castcost') == None:
                     entry['castcost'] = line
                     continue
-                # if we're dealing with a planeswalker and the line is just 
+
+                # if we're dealing with a planeswalker and the line is just
                 # a 1 or 2 digit number, file that under loyalty.
                 elif entry.get('type')[:12] == 'Planeswalker' and \
                 match('^(\d{1,2})$', line) is not None:

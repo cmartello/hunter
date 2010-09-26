@@ -2,10 +2,49 @@
 
 
 import sqlite3
+import re
 from re import search, match
 from sqlite3 import connect
 from sys import argv
 from pprint import pprint
+
+
+def mana_cost(text):
+    '''Accepts a text string that matches the (awful) regular expression
+    of a mana cost and returns an integer for the converted mana cost of
+    a spell.
+    '''
+    # strip Xs from cost
+    text = text.replace('X', '')
+
+    # look for and count up the 'split' mana symbols
+    hybrid = 0
+    nohy = ''
+    cost = text.replace('(',')').split(')')
+    for x in cost:
+        regex = match('[wubrg]/[wubrg]', x)
+        if regex != None:
+            hybrid += 1
+            continue
+        regex = match('(\d)/[wubrg]', x)
+        if regex != None:
+            hybrid += int(regex.group(1))
+            continue
+        nohy += x
+
+    text = nohy
+
+    # handle split cards via recursion.
+    regex = match('([WUBRG0-9\(\)]+) // ([WUBRG0-9\(\)]+)', text, re.I)
+    if regex != None:
+        return mana_cost(regex.group(1)) + mana_cost(regex.group(2))
+
+    # most basic mana costs can be handled this way
+    regex = match('(\d+|)(([WUBRG])+|)', text)
+
+    # the preceding '0' is to prevent int() from crying about getting a
+    # zero-length string.
+    return int('0' + regex.group(1)) + len(regex.group(2)) + hybrid
 
 
 class Hunter:
@@ -57,6 +96,7 @@ class Hunter:
                 cardid INTEGER PRIMARY KEY,
                 cardname TEXT,
                 castcost TEXT,
+                con_mana INTEGER,
                 loyalty TEXT,
                 type TEXT,
                 power TEXT,
@@ -90,6 +130,7 @@ class Hunter:
                 # Don't overwrite casting cost if its already there
                 if entry.get('castcost') == None:
                     entry['castcost'] = line
+                    entry['con_mana'] = mana_cost(line)
                     continue
                 # if we're dealing with a planeswalker and the line is just
                 # a 1 or 2 digit number, file that under loyalty.
@@ -133,6 +174,7 @@ class Hunter:
                     str(cardid) +\
                     "','" + entry['cardname'] +\
                     "','" + entry.get('castcost', 'N/A') +\
+                    "','" + str(entry.get('con_mana', 0)) +\
                     "','" + entry.get('loyalty', 'N/A') +\
                     "','" + entry['type'] +\
                     "','" + entry.get('power', '-') +\

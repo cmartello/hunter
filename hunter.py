@@ -85,13 +85,12 @@ class Hunter:
 
             # match a casting cost
             regex = match(\
-                '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+(| \/\/ (X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+)$', line)
+                '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+(| // (X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+)$', line)
             if regex is not None:
                 # Don't overwrite casting cost if its already there
                 if entry.get('castcost') == None:
                     entry['castcost'] = line
                     continue
-
                 # if we're dealing with a planeswalker and the line is just
                 # a 1 or 2 digit number, file that under loyalty.
                 elif entry.get('type')[:12] == 'Planeswalker' and \
@@ -174,4 +173,3 @@ if __name__ == "__main__":
         exit(1)
 
     TEST = Hunter(argv[1])
-

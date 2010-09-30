@@ -16,8 +16,9 @@ def card_color(mana):
     color_letters = 'WUBRG'
     colors = ''
     clean_mana = [x.upper() for x in mana if x not in '0123456789()x/']
-    for x in color_letters:
-        if clean_mana.count(x) > 0: colors += x
+    for letter in color_letters:
+        if clean_mana.count(letter) > 0:
+            colors += letter
     return colors
 
 
@@ -32,17 +33,17 @@ def mana_cost(text):
     # look for and count up the 'split' mana symbols
     hybrid = 0
     nohy = ''
-    cost = text.replace('(',')').split(')')
-    for x in cost:
-        regex = match('[wubrg]/[wubrg]', x)
+    cost = text.replace('(', ')').split(')')
+    for token in cost:
+        regex = match('[wubrg]/[wubrg]', token)
         if regex != None:
             hybrid += 1
             continue
-        regex = match('(\d)/[wubrg]', x)
+        regex = match('(\d)/[wubrg]', token)
         if regex != None:
             hybrid += int(regex.group(1))
             continue
-        nohy += x
+        nohy += token
 
     text = nohy
 

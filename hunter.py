@@ -9,16 +9,23 @@ from sys import argv
 from pprint import pprint
 
 
-def card_color(mana):
+def card_color(mana, cardname, text):
     '''Determines a card's color by its casting cost and by checking card
     text (for special cases like colored zero-cost spells and so forth.)
     Returns a text string that matches the card's color(s).'''
     color_letters = 'WUBRG'
+    color_names = {'black':'B', 'blue': 'U', 'green' : 'G', 'red' : 'R', 'white': 'W'}
     colors = ''
     clean_mana = [x.upper() for x in mana if x not in '0123456789()x/']
     for letter in color_letters:
         if clean_mana.count(letter) > 0:
             colors += letter
+    
+    searchstring = cardname + ' is (white|blue|black|red|green)'
+    regex = match(searchstring, text)
+    if regex is not None:
+        if regex.group(1) in color_names.keys():
+            colors += color_names[regex.group(1)]
     return colors
 
 
@@ -188,7 +195,7 @@ class Hunter:
                     str(cardid) +\
                     "','" + entry['cardname'] +\
                     "','" + entry.get('castcost', 'N/A') +\
-                    "','" + card_color(entry.get('castcost', 'N/A')) +\
+                    "','" + card_color(entry.get('castcost', 'N/A'), entry['cardname'], entry.get('text', '')) +\
                     "','" + str(entry.get('con_mana', 0)) +\
                     "','" + entry.get('loyalty', 'N/A') +\
                     "','" + entry['type'] +\

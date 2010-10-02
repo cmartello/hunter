@@ -7,3 +7,14 @@ so if you need a database of cards and you're comfortable with searching
 it on the command line with SQL queries, go for it.
 
 Otherwise, watch this space for future developments.
+
+* cherrypy interface (experimental branch)
+A very simple (and butt-ugly) query frontend is implemented in 
+'querytest.py'.  Simply run it and then point your web browser to
+
+http://localhost:8080/raw_query?query=
+
+And type your query at the end.
+
+This is nothing more than the groundwork for a later application of the
+database program.

@@ -74,20 +74,30 @@ class Hunter:
     queries for the user.
     """
 
-    def __init__(self, filename):
+
+    def __init__(self, filename, autoload=True):
         """Accepts a filename and sets up services as dictated by the
         filename; if the filename ends in ".db" it simply opens a database
         connection to the file.  If the filename ends in ".txt", it parses
         the text file and creates an appropriate database file, then loads
         that instead.
+
+        When autoload is False, the database connection is NOT opened.
+        Instead, a connection is created each time a raw_query is called.
         """
+
+        self.autoload = autoload
 
         # check to see what kind of file has been specified
         res = search('(\.txt|\.db)$', filename)
         if res.group(1) == '.txt':
             self.parse_oracle(filename)
         if res.group(1) == '.db':
+            self.dbname = filename
             self.dbase = connect(filename)
+
+        if self.autoload == False:
+            self.dbase.close()
 
     def parse_oracle(self, filename):
         """Parses an 'oracle' text file and converts it to a database.
@@ -101,8 +111,8 @@ class Hunter:
         oracle = open(filename, 'r')
 
         # create the database
-        dbname = filename.replace('.txt', '.db')
-        self.dbase = connect(dbname)
+        self.dbname = filename.replace('.txt', '.db')
+        self.dbase = connect(self.dbname)
 
         # this will be used later when determining if a given line
         # describes the type of the card
@@ -215,6 +225,35 @@ class Hunter:
 
         # commit the table to the db
         self.dbase.commit()
+
+
+    def raw_query(self, query=''):
+        """Performs a raw query on the database.  Will connect to the database
+        if it's not automatically loaded.
+        
+        Returns the results as a string for cherrypy."""
+
+        if self.autoload == False:
+            self.dbase = connect(self.dbname)
+
+        results = self.dbase.execute(query).fetchall()
+        output = ''
+        for line in results:
+            output += str(line)
+            output += '\n'
+
+        # close the db if it's not autoloaded
+        if self.autoload == False:
+            self.dbase.close()
+
+        return output
+
+    def index(self):
+        return 'There is nothing here.'
+
+
+    index.exposed = True
+    raw_query.exposed = True
 
 
 def repl(hobj):

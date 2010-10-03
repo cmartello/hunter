@@ -231,29 +231,18 @@ class Hunter:
         """Performs a raw query on the database.  Will connect to the database
         if it's not automatically loaded.
         
-        Returns the results as a string for cherrypy."""
+        Returns the results as an array of tuples."""
 
         if self.autoload == False:
             self.dbase = connect(self.dbname)
 
         results = self.dbase.execute(query).fetchall()
-        output = ''
-        for line in results:
-            output += str(line)
-            output += '\n'
 
         # close the db if it's not autoloaded
         if self.autoload == False:
             self.dbase.close()
 
-        return output
-
-    def index(self):
-        return 'There is nothing here.'
-
-
-    index.exposed = True
-    raw_query.exposed = True
+        return results
 
 
 def repl(hobj):

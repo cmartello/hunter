@@ -113,7 +113,7 @@ class Hunter:
         # create the 'cards' table
         self.dbase.execute('''CREATE TABLE cards
             (
-                cardid INTEGER PRIMARY KEY,
+                cardid INTEGER PRIMARY KEY AUTOINCREMENT,
                 cardname TEXT,
                 castcost TEXT,
                 color TEXT,
@@ -127,7 +127,6 @@ class Hunter:
             ) ''')
 
         # state variables
-        cardid = 0
         entline = 0
         entry = dict()
 
@@ -191,9 +190,10 @@ class Hunter:
             # an empty line indicates the end of an entry
             regex = match('^$', line)
             if regex is not None:
-                self.dbase.execute("insert into cards values ('" +\
-                    str(cardid) +\
-                    "','" + entry['cardname'] +\
+                self.dbase.execute("INSERT INTO cards ("+\
+                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, printings, cardtext"
+                    ")values ('" +\
+                    entry['cardname'] +\
                     "','" + entry.get('castcost', 'N/A') +\
                     "','" + card_color(entry.get('castcost', 'N/A'), entry['cardname'], entry.get('text', '')) +\
                     "','" + str(entry.get('con_mana', 0)) +\
@@ -206,7 +206,6 @@ class Hunter:
 
                 #reset state, bump ID up
                 entry = dict()
-                cardid += 1
                 entline = 0
                 continue
 

@@ -3,7 +3,7 @@ from hunter import Hunter
 
 class Frontend:
 
-    hunter = Hunter('Vintage-2010-08-01.db', False)
+    hunter = Hunter('Vintage-2010-10-02.db', False)
 
     def index(self, query=None):
         if query is not None:

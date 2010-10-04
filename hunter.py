@@ -6,7 +6,6 @@ import re
 from re import search, match
 from sqlite3 import connect
 from sys import argv
-from pprint import pprint
 
 
 def card_color(mana, cardname, text):

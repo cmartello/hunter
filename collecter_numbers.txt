@@ -1,0 +1,42 @@
+Notes on collector numbers:
+
+- Officially, the numbering is done first by color and then by name.
+    - Color order:
+        Colorless (non-artifact)
+        White
+        Blue
+        Black
+        Red
+        Green
+        Multicolored
+        Hybrid
+        Artifact
+        Land
+    - Hybrid cards may be numbered differently in Lorwyn as opposed to 
+      a standard order
+    - Alara Reborn is all multicolored and uses a different numbering scheme.
+      So far as I can tell, the two-colored section is much like any other set
+      where the first color clockwise indicates where it belongs.
+    - Cross-color cards (and three-color cards) are ordered differently also.
+
+- Sets before a certain point don't have thier own official numbers. 
+	- As it turns out, there's a couple ways that they are assigned:
+		- On Gatherer, they are simply numbered in alphabetical order
+		- On magiccards.info, they're numbered by color, then by name.  
+          Note that it uses the BUGRW color order.
+
+- Some cards have multiple artwork.
+    - Basic lands have multiple art, but each gets their own collector number.
+    - Multiple artworks for cards basically stopped around Alliances block, and
+      thus before collector numbers.
+    - One counterexample; one of the Kamigawa sets had a legend called "Brothers"
+      something that used "a" and "b" numbers for artwork (ie: 184a and 184b).
+      This is about as close to an official policy on this matter.
+    - There does not seem to be any standard for ordering different artworks
+      Not by artist, and basic lands are similar enough (often by the same
+      artist, too).
+
+- Split cards and flip cards
+    - The full version of split cards do exist within the Oracle file.
+    - Each half of the split card also has its own entry, clearly marked.
+    - Inverse parts of flip cards are also clearly marked.

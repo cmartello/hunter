@@ -245,20 +245,6 @@ class Hunter:
         return results
 
 
-def repl(hobj):
-    """REPL for SQL statements.  Mostly for testing purposes."""
-    user = ''
-    while user != 'exit':
-        user = raw_input('> ')
-        try:
-            results = hobj.dbase.execute(user).fetchall()
-        except sqlite3.OperationalError as error:
-            print 'sqlite3.OperationalError', error
-        else:
-            pprint(results)
-            print len(results), 'results'
-
-
 if __name__ == "__main__":
     if len(argv) != 2:
         print "Usage: hunter.py file.txt\n"

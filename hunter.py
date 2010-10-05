@@ -79,7 +79,40 @@ class Hunter:
         connection to the file.  If the filename ends in ".txt", it parses
         the text file and creates an appropriate database file, then loads
         that instead.
+
+        Performs other setup functions along the way, mostly just initilizing
+        a few tables that are used by other functions.
         """
+
+        # this will be used later when determining if a given line
+        # describes the type of the card
+        self.types = set(['Artifact', 'Tribal', 'Legendary', 'Land', 'Snow',
+            'Creature', 'Sorcery', 'Instant', 'Planeswalker', 'Enchantment',
+            'World', 'Basic', '//', 'Vanguard', 'Scheme', 'Plane',
+            'Ongoing', ''])
+
+        # read a list of sets from setlist.txt
+        self.sets = dict()
+        setlist = open('setlist.txt', 'r')
+        for line in setlist:
+            # ignore blank lines
+            regex = match('^$', line)
+            if regex is not None: 
+                continue
+
+            # ignore comments
+            regex = match('^#', line)
+            if regex is not None:
+                continue
+
+            # a properly-formatted line consists of the set name, set
+            # abbreviation, and release date, all seperated by colons.
+            regex = match('(.+):(.+):(.+)', line)
+            if regex is not None:
+                self.sets[regex.group(2)] = (regex.group(1), regex.group(3))
+
+        # clean up, close the file
+        setlist.close()
 
         # check to see what kind of file has been specified
         res = search('(\.txt|\.db)$', filename)
@@ -102,13 +135,6 @@ class Hunter:
         # create the database
         dbname = filename.replace('.txt', '.db')
         self.dbase = connect(dbname)
-
-        # this will be used later when determining if a given line
-        # describes the type of the card
-        types = set(['Artifact', 'Tribal', 'Legendary', 'Land', 'Snow',
-            'Creature', 'Sorcery', 'Instant', 'Planeswalker', 'Enchantment',
-            'World', 'Basic', '//', 'Vanguard', 'Scheme', 'Plane',
-            'Ongoing', ''])
 
         # create the 'cards' table
         self.dbase.execute('''CREATE TABLE cards
@@ -172,7 +198,7 @@ class Hunter:
                 if regex is None:
                     words = set(line.split(' '))
 
-                if words <= types:
+                if words <= self.types:
                     entry['type'] = line
                     continue
 

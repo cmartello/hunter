@@ -136,6 +136,15 @@ class Hunter:
         dbname = filename.replace('.txt', '.db')
         self.dbase = connect(dbname)
 
+        # create a table to identify the .db for later
+        self.dbase.execute('''CREATE TABLE format
+            (
+                schema INTEGER,
+                basefile TEXT
+            ) ''')
+
+        self.dbase.execute('''INSERT INTO format VALUES (10, "''' + filename + '")')
+
         # create the 'cards' table
         self.dbase.execute('''CREATE TABLE cards
             (

@@ -1,9 +1,11 @@
 import cherrypy
+from sys import argv
 from hunter import Hunter
 
 class Frontend:
 
-    hunter = Hunter('Vintage-2010-10-02.db', False)
+    def __init__(self, dbfilename):
+        self.hunter = Hunter(dbfilename, False)
 
     def index(self, query=None):
         if query is not None:
@@ -20,7 +22,11 @@ class Frontend:
 
     index.exposed = True
 
-cherrypy.root = Frontend()
 
 if __name__ == '__main__':
+    if len(argv) != 2:
+        print 'Usage: webhunter.py file.db'
+        exit(1)
+
+    cherrypy.root = Frontend(argv[1])
     target = cherrypy.server.start()

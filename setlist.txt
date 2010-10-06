@@ -2,93 +2,70 @@ Alpha:A:1993-08-05
 Beta:B:1993-10-01
 Unlimited:U:1993-12-01
 Arabian Nights:AN:1993-12-02
-
 Antiquities:AQ:1994-03-01
 Revised:RV:1994-04-01
 Legends:LE:1994-06-01
 The Dark:DK:1994-08-01
 Fallen Empires:FE:1994-11-01
-
 Fourth Edition:4E:1995-04-01
 Ice Age:IA:1995-06-01
 Chronicles:CH:1995-07-01
 Homelands:HL:1995-10-01
-
 Alliances:AI:1996-06-10
 Mirage:MI:1996-10-01
-
 Visions:VI:1997-02-01
 Fifth Edition:5E:1997-03-01
 Portal:P1:1997-05-01
 Weatherlight:WL:1997-06-01
 Tempest:TE:1997-10-01
-
 Stronghold:ST:1998-02-01
 Exodus:EX:1998-06-15
 Portal Second Age:P2:1998-06-24
-#Unglued:UG?:1998-08-01
 Urza's Saga:US:1998-10-01
-#Anthologies:ANT?:1998-11-01
-
 Urza's Legacy:UL:1999-02-01
 Sixth Edition:6E:1999-04-27
 Urza's Destiny:UD:1999-06-23
 Portal Three Kingdoms:P3K:1999-07-06
 Starter '99:S99:1999-08-27
 Mercadian Masques:MM:1999-10-27
-#Battle Royale:BRY:1999-11-01
-
 Nemesis:NE:2000-02-14
 Starter 2000:S00:2000-04-24
 Prophecy:PR:2000-06-05
 Invasion:IN:2000-09-01
-#Beatdown:BTD:2000-10-01
 Planeshift:PS:2001-02-01
-
 7th Edition:7E:2001-04-02
 Apocalypse:AP:2001-06-01
 Odyssey:OD:2001-09-21
-#Deckmasters:DKM:2001-12-01
-
 Torment:TOR:2002-02-08
 Judgement:JUD:2002-05-27
 Onslaught:ONS:2002-10-07
-
 Legions:LGN:2003-01-01
 Scourge:SCG:2003-05-19
 Eighth Edition:8ED:2003-07-28
 Mirrodin:MRD:2003-10-02
-
 Darksteel:DST:2004-02-06
 Fifth Dawn:5DN:2004-06-04
 Champions of Kamigawa:CHK:2004-10-01
-#Unhinged:UNH:2004-11-19
-
 Betrayers of Kamigawa:BOK:2005-02-04
 Saviors of Kamigawa:SOK:2005-06-03
 Ninth Edition:9ED:2005-07-29
 Ravnica:RAV:2005-10-07
-
 Guildpact:GPT:2006-02-03
 Dissension:DIS:2006-05-05
 Coldsnap:CSP:2006-07-21
 Time Spiral:TSP:2006-10-06
-
 Planar Chaos:PLC:2007-02-02
 Future Sight:2007-05-04
 Tenth Edition:10E:2007-07-13
 Lorwyn:LRW:2007-10-12
-
 Morningtide:MOR:2008-02-01
 Shadowmoor:SHM:2008-05-02
 Eventide:EVE:2008-07-25
 Shards of Alara:ALA:2008-10-03
-
 Conflux:CON:2009-02-06
 Alara Reborn:ARB:2009-04-30
 Magic 2010:M10:2009-07-17
 Zendikar:ZEN:2009-10-02
-
 Worldwake:WWK:2010-02-05
 Rise of the Eldrazi:ROE:2010-04-23
 Magic 2011:M11:2010-07-16

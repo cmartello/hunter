@@ -6,7 +6,6 @@ import re
 from re import search, match
 from sqlite3 import connect
 from sys import argv
-from pprint import pprint
 
 
 def card_color(mana, cardname, text):
@@ -84,9 +83,41 @@ class Hunter:
 
         When autoload is False, the database connection is NOT opened.
         Instead, a connection is created each time a raw_query is called.
+
+        Performs other setup functions along the way, mostly just initilizing
+        a few tables that are used by other functions.
         """
 
         self.autoload = autoload
+        # this will be used later when determining if a given line
+        # describes the type of the card
+        self.types = set(['Artifact', 'Tribal', 'Legendary', 'Land', 'Snow',
+            'Creature', 'Sorcery', 'Instant', 'Planeswalker', 'Enchantment',
+            'World', 'Basic', '//', 'Vanguard', 'Scheme', 'Plane',
+            'Ongoing', ''])
+
+        # read a list of sets from setlist.txt
+        self.sets = dict()
+        setlist = open('setlist.txt', 'r')
+        for line in setlist:
+            # ignore blank lines
+            regex = match('^$', line)
+            if regex is not None: 
+                continue
+
+            # ignore comments
+            regex = match('^#', line)
+            if regex is not None:
+                continue
+
+            # a properly-formatted line consists of the set name, set
+            # abbreviation, and release date, all seperated by colons.
+            regex = match('(.+):(.+):(.+)', line)
+            if regex is not None:
+                self.sets[regex.group(2)] = (regex.group(1), regex.group(3))
+
+        # clean up, close the file
+        setlist.close()
 
         # check to see what kind of file has been specified
         res = search('(\.txt|\.db)$', filename)
@@ -114,16 +145,10 @@ class Hunter:
         self.dbname = filename.replace('.txt', '.db')
         self.dbase = connect(self.dbname)
 
-        # this will be used later when determining if a given line
-        # describes the type of the card
-        types = set(['Artifact', 'Tribal', 'Legendary', 'Land', 'Snow',
-            'Creature', 'Sorcery', 'Instant', 'Planeswalker',
-            'Enchantment', 'World', 'Basic', '//', ''])
-
         # create the 'cards' table
         self.dbase.execute('''CREATE TABLE cards
             (
-                cardid INTEGER PRIMARY KEY,
+                cardid INTEGER PRIMARY KEY AUTOINCREMENT,
                 cardname TEXT,
                 castcost TEXT,
                 color TEXT,
@@ -132,12 +157,13 @@ class Hunter:
                 type TEXT,
                 power TEXT,
                 toughness TEXT,
+                v_hand TEXT,
+                v_life TEXT,
                 printings TEXT,
                 cardtext TEXT
             ) ''')
 
         # state variables
-        cardid = 0
         entline = 0
         entry = dict()
 
@@ -181,15 +207,21 @@ class Hunter:
                 if regex is None:
                     words = set(line.split(' '))
 
-                if words <= types:
+                if words <= self.types:
                     entry['type'] = line
                     continue
 
-            # match power/toughness
-            regex = match('^([0-9*+]{1,3})\/([0-9*+]{1,3})$', line)
-            if regex is not None:
-                entry['power'] = regex.group(1)
-                entry['toughness'] = regex.group(2)
+            # match power/toughness -- if the card is a planeswalker, instead
+            # put these data in as life/cards
+            regex = match('^([0-9*+-]{1,3})\/([0-9*+-]{1,3})$', line)
+            type = search('(Creature|Vanguard)', entry.get('type', ''))
+            if regex is not None and type is not None:
+                if type.group(1) == 'Creature':
+                    entry['power'] = regex.group(1)
+                    entry['toughness'] = regex.group(2)
+                if type.group(1) == 'Vanguard':
+                    entry['v_hand'] = regex.group(1)
+                    entry['v_life'] = regex.group(2)
                 continue
 
             # match publication info
@@ -201,9 +233,10 @@ class Hunter:
             # an empty line indicates the end of an entry
             regex = match('^$', line)
             if regex is not None:
-                self.dbase.execute("insert into cards values ('" +\
-                    str(cardid) +\
-                    "','" + entry['cardname'] +\
+                self.dbase.execute("INSERT INTO cards ("+\
+                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, printings, cardtext"
+                    ")values ('" +\
+                    entry['cardname'] +\
                     "','" + entry.get('castcost', 'N/A') +\
                     "','" + card_color(entry.get('castcost', 'N/A'), entry['cardname'], entry.get('text', '')) +\
                     "','" + str(entry.get('con_mana', 0)) +\
@@ -211,12 +244,13 @@ class Hunter:
                     "','" + entry['type'] +\
                     "','" + entry.get('power', '-') +\
                     "','" + entry.get('toughness', '-') +\
+                    "','" + entry.get('v_hand', 'N/A') +\
+                    "','" + entry.get('v_life', 'N/A') +\
                     "','" + entry.get('printings', '???') +\
                     "','" + entry.get('text', '') + "')")
 
                 #reset state, bump ID up
                 entry = dict()
-                cardid += 1
                 entline = 0
                 continue
 

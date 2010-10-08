@@ -13,18 +13,19 @@ def card_color(mana, cardname, text):
     Returns a text string that matches the card's color(s).'''
     color_letters = 'WUBRG'
     color_names = {'black': 'B', 'blue': 'U', 'green': 'G', 'red': 'R', \
-        'white': 'W' }
+        'white': 'W', 'colorless': '', 'all colors': 'WUBRG'}
     colors = ''
     clean_mana = [x.upper() for x in mana if x not in '0123456789()x/']
     for letter in color_letters:
         if clean_mana.count(letter) > 0:
             colors += letter
 
-    searchstring = cardname + ' is (white|blue|black|red|green)'
-    regex = match(searchstring, text)
+    searchstring = cardname +\
+        ' is (white|blue|black|red|green|colorless|all colors)'
+    regex = search(searchstring, text)
     if regex is not None:
         if regex.group(1) in color_names.keys():
-            colors += color_names[regex.group(1)]
+            colors = color_names[regex.group(1)]
     return colors
 
 

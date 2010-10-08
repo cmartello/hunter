@@ -1,7 +1,6 @@
 """hunter.py --- An alternative to WOTC's "Gatherer" """
 
 
-import sqlite3
 import re
 from re import search, match
 from sqlite3 import connect
@@ -13,13 +12,14 @@ def card_color(mana, cardname, text):
     text (for special cases like colored zero-cost spells and so forth.)
     Returns a text string that matches the card's color(s).'''
     color_letters = 'WUBRG'
-    color_names = {'black':'B', 'blue': 'U', 'green' : 'G', 'red' : 'R', 'white': 'W'}
+    color_names = {'black': 'B', 'blue': 'U', 'green': 'G', 'red': 'R', \
+        'white': 'W' }
     colors = ''
     clean_mana = [x.upper() for x in mana if x not in '0123456789()x/']
     for letter in color_letters:
         if clean_mana.count(letter) > 0:
             colors += letter
-    
+
     searchstring = cardname + ' is (white|blue|black|red|green)'
     regex = match(searchstring, text)
     if regex is not None:
@@ -97,7 +97,7 @@ class Hunter:
         for line in setlist:
             # ignore blank lines
             regex = match('^$', line)
-            if regex is not None: 
+            if regex is not None:
                 continue
 
             # ignore comments
@@ -143,7 +143,8 @@ class Hunter:
                 basefile TEXT
             ) ''')
 
-        self.dbase.execute('''INSERT INTO format VALUES (10, "''' + filename + '")')
+        self.dbase.execute('''INSERT INTO format VALUES (10, "''' +\
+            filename + '")')
 
         # create the 'cards' table
         self.dbase.execute('''CREATE TABLE cards
@@ -214,12 +215,12 @@ class Hunter:
             # match power/toughness -- if the card is a planeswalker, instead
             # put these data in as life/cards
             regex = match('^([0-9*+-]{1,3})\/([0-9*+-]{1,3})$', line)
-            type = search('(Creature|Vanguard)', entry.get('type', ''))
-            if regex is not None and type is not None:
-                if type.group(1) == 'Creature':
+            cardtype = search('(Creature|Vanguard)', entry.get('type', ''))
+            if regex is not None and cardtype is not None:
+                if cardtype.group(1) == 'Creature':
                     entry['power'] = regex.group(1)
                     entry['toughness'] = regex.group(2)
-                if type.group(1) == 'Vanguard':
+                if cardtype.group(1) == 'Vanguard':
                     entry['v_hand'] = regex.group(1)
                     entry['v_life'] = regex.group(2)
                 continue
@@ -233,7 +234,7 @@ class Hunter:
             # an empty line indicates the end of an entry
             regex = match('^$', line)
             if regex is not None:
-                self.dbase.execute("INSERT INTO cards ("+\
+                self.dbase.execute("INSERT INTO cards (" +\
                     "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, printings, cardtext"
                     ")values ('" +\
                     entry['cardname'] +\

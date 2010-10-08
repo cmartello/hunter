@@ -1,3 +1,10 @@
+"""repl_hunter.py
+
+A crude REPL around a hunter object for searching cards from the command
+line.  Mostly useful for system that don't have a proper sqlite3 tool on
+hand.  May well be improved down the road.
+"""
+
 import sqlite3
 from hunter import Hunter
 from pprint import pprint
@@ -8,14 +15,14 @@ if __name__ == '__main__':
     if len(argv) != 2:
         print 'Usage: repl_hunter.py file.(txt|db)'
         exit(1)
-    hobj = Hunter(argv[1])
-    user = ''
-    while user != 'exit':
-        user = raw_input('> ')
+    HOBJ = Hunter(argv[1])
+    USER = ''
+    while USER != 'exit':
+        USER = raw_input('> ')
         try:
-            results = hobj.dbase.execute(user).fetchall()
+            RESULTS = HOBJ.dbase.execute(USER).fetchall()
         except sqlite3.OperationalError as error:
             print 'sqlite3.OperationalError', error
         else:
-            pprint(results)
-            print len(results), 'results'
+            pprint(RESULTS)
+            print len(RESULTS), 'results'

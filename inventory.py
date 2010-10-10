@@ -14,49 +14,53 @@ HTML_HEAD = '''
     </HEAD>
     <BODY>
         <FORM action="search" method="get">
-            <TABLE width=800 border=1>
+            <TABLE width=800>
                 <TR>
                     <TD width=150><label for="query">Raw SQL query</LABEL>
                     <TD><input type="text" name="query" size=100 />
                 </TR>
             </TABLE>
-        </FORM>
-'''
+        </FORM>'''
 
 
 HTML_FOOT = '''
     </BODY>
-</HTML>
-'''
+</HTML>'''
 
 TABLE_HEAD = '''
-<TABLE border=1 width=800>
-    <TR>
-        <TH>#
-        <TH>Cardname
-        <TH>Cost
-        <TH>Color
-        <TH>CMC
-        <TH>Type
-        <TH>Printings
-        <TH>P/T/L
-    </TR>
-'''
+    <FORM action="update_inventory" method="get">
+        <TABLE width=850>
+                <TR>
+                    <TH>#
+                    <TH>Cardname
+                    <TH>Cost
+                    <TH>Color
+                    <TH>CMC
+                    <TH>Type
+                    <TH>Printings
+                    <TH>P/T/L
+                </TR>'''
 
 TABLE_ROW = '''
-    <TR>
-        <TD width=25><input name=%d type=text size=1 value=%d />
-        <TD width=150>%s
-        <TD width=75 align=center>%s
-        <TD width=100 align=center>%s
-        <TD width=25 align=center>%d
-        <TD width=150 align=center>%s
-        <TD width=150>%s
-        <TD width=* align=center>%s
-    </TR>
-'''
+                <TR>
+                    <TD width=25><input name=%d type=text size=1 value=%d />
+                    <TD width=150>%s
+                    <TD width=75 align=center>%s
+                    <TD width=100 align=center>%s
+                    <TD width=25 align=center>%d
+                    <TD width=200 align=center>%s
+                    <TD width=150>%s
+                    <TD width=* align=center>%s
+                </TR>'''
 # cardid, total in inventory, cardname, castcost, color, converted mana cost
 # type, printings, power/toughness or loyalty
+
+
+TABLE_FOOT = '''
+            </TABLE>
+            <input type="submit" />
+        </FORM>'''
+
 
 def create_inventory_db(filename):
     inv_db = connect(filename)
@@ -115,6 +119,9 @@ class Inventory:
         # begin generating output
         output = HTML_HEAD + TABLE_HEAD
 
+        # tell the user how many results there were.
+        output += '''<P>%d results returned.</P>''' % len(rows)
+
         for row in rows:
             # pull the quantity data from inventory
             self.inv_db = connect(self.inventoryfile)
@@ -143,16 +150,24 @@ class Inventory:
             # add the formatted row to the output
             output += (TABLE_ROW % (row[0], quantity, row[1], row[2], row[3], row[4], row[6], printings, ptl))
         
-        # add the footer
-        output += HTML_FOOT
+        # add the footers
+        output += (TABLE_FOOT + HTML_FOOT)
         
         # close the DB
         self.inv_db.close()
 
         return output
 
+
+    def update_inventory(self, **args):
+        output = ''
+        for x in args.keys():
+            output += str(x) + ',' + str(args[x]) + ',' + '\n<BR/>'
+        return output
+
     index.exposed = True
     search.exposed = True
+    update_inventory.exposed = True
 
 if __name__ == '__main__':
     if len(argv) != 3:

@@ -134,8 +134,14 @@ class Inventory:
             if search('planeswalker', row[6], re.I) is not None:
                 ptl = row[5]
 
+            # truncate long 'printings' lines
+            if len(row[11]) > 16:
+                printings = row[11][:16] + '...'
+            else:
+                printings = row[11]
+
             # add the formatted row to the output
-            output += (TABLE_ROW % (row[0], quantity, row[1], row[2], row[3], row[4], row[6], row[11], ptl))
+            output += (TABLE_ROW % (row[0], quantity, row[1], row[2], row[3], row[4], row[6], printings, ptl))
         
         # add the footer
         output += HTML_FOOT

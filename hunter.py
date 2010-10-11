@@ -92,29 +92,6 @@ class Hunter:
             'World', 'Basic', '//', 'Vanguard', 'Scheme', 'Plane',
             'Ongoing', ''])
 
-        # read a list of sets from setlist.txt
-        self.sets = dict()
-        setlist = open('setlist.txt', 'r')
-        for line in setlist:
-            # ignore blank lines
-            regex = match('^$', line)
-            if regex is not None:
-                continue
-
-            # ignore comments
-            regex = match('^#', line)
-            if regex is not None:
-                continue
-
-            # a properly-formatted line consists of the set name, set
-            # abbreviation, and release date, all seperated by colons.
-            regex = match('(.+):(.+):(.+)', line)
-            if regex is not None:
-                self.sets[regex.group(2)] = (regex.group(1), regex.group(3))
-
-        # clean up, close the file
-        setlist.close()
-
         # check to see what kind of file has been specified
         res = search('(\.txt|\.db)$', filename)
         if res.group(1) == '.txt':
@@ -164,6 +141,44 @@ class Hunter:
                 printings TEXT,
                 cardtext TEXT
             ) ''')
+
+        # create a table for the setlist
+        self.dbase.execute('''CREATE TABLE sets
+            (
+                abbreviation TEXT,
+                setname TEXT,
+                released TEXT
+            ) ''')
+
+        # read a list of sets from setlist.txt
+        setlist = open('setlist.txt', 'r')
+        for line in setlist:
+            # escape single quotes
+            line = line.replace("'", "''")
+
+            # ignore blank lines
+            regex = match('^$', line)
+            if regex is not None:
+                continue
+
+            # ignore comments
+            regex = match('^#', line)
+            if regex is not None:
+                continue
+
+            # a properly-formatted line consists of the set name, set
+            # abbreviation, and release date, all seperated by colons.
+            regex = match('(.+):(.+):(.+)', line)
+            if regex is not None:
+                self.dbase.execute("INSERT INTO sets VALUES (" +\
+                    "'" + regex.group(2) +\
+                    "','" + regex.group(1) +\
+                    "','" + regex.group(3) +\
+                "')" )
+
+        # clean up, close the file
+        self.dbase.commit()
+        setlist.close()
 
         # state variables
         entline = 0

@@ -19,6 +19,8 @@ if __name__ == '__main__':
     USER = ''
     while USER != 'exit':
         USER = raw_input('> ')
+        if USER == 'exit':
+            exit(0)
         try:
             RESULTS = HOBJ.dbase.execute(USER).fetchall()
         except sqlite3.OperationalError as error:

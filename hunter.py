@@ -99,33 +99,22 @@ class Hunter:
         if res.group(1) == '.db':
             self.dbase = connect(filename)
 
-    def parse_oracle(self, filename):
-        """Parses an 'oracle' text file and converts it to a database.
 
-        The database filename is simply the original filename with ".txt"
-        replaced with ".db".  Nothing prevents the user from changing this
-        later.
-        """
-
-        # open up the original file
-        oracle = open(filename, 'r')
-
-        # create the database
-        dbname = filename.replace('.txt', '.db')
-        self.dbase = connect(dbname)
+    def build_tables(self, connection, filename):
+        """Creates the tables that will be used in a typical Hunter databse."""
 
         # create a table to identify the .db for later
-        self.dbase.execute('''CREATE TABLE format
+        connection.execute('''CREATE TABLE format
             (
                 schema INTEGER,
                 basefile TEXT
             ) ''')
 
-        self.dbase.execute('''INSERT INTO format VALUES (10, "''' +\
+        connection.execute('''INSERT INTO format VALUES (20, "''' +\
             filename + '")')
 
         # create the 'cards' table
-        self.dbase.execute('''CREATE TABLE cards
+        connection.execute('''CREATE TABLE cards
             (
                 cardid INTEGER PRIMARY KEY AUTOINCREMENT,
                 cardname TEXT,
@@ -143,7 +132,7 @@ class Hunter:
             ) ''')
 
         # create a table for the setlist
-        self.dbase.execute('''CREATE TABLE sets
+        connection.execute('''CREATE TABLE sets
             (
                 abbreviation TEXT,
                 setname TEXT,
@@ -170,15 +159,38 @@ class Hunter:
             # abbreviation, and release date, all seperated by colons.
             regex = match('(.+):(.+):(.+)', line)
             if regex is not None:
-                self.dbase.execute("INSERT INTO sets VALUES (" +\
+                connection.execute("INSERT INTO sets VALUES (" +\
                     "'" + regex.group(2) +\
                     "','" + regex.group(1) +\
                     "','" + regex.group(3) +\
                 "')" )
 
-        # clean up, close the file
-        self.dbase.commit()
+        # close the setlist
         setlist.close()
+
+        # commit the DB and we're done.
+        connection.commit()
+
+        return
+
+
+    def parse_oracle(self, filename):
+        """Parses an 'oracle' text file and converts it to a database.
+
+        The database filename is simply the original filename with ".txt"
+        replaced with ".db".  Nothing prevents the user from changing this
+        later.
+        """
+
+        # open up the original file
+        oracle = open(filename, 'r')
+
+        # create the database
+        dbname = filename.replace('.txt', '.db')
+        self.dbase = connect(dbname)
+
+        # build the tables
+        self.build_tables(self.dbase, filename)
 
         # state variables
         entline = 0

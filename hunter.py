@@ -266,15 +266,15 @@ class Hunter:
                     "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, printings, cardtext"
                     ")values ('" +\
                     entry['cardname'] +\
-                    "','" + entry.get('castcost', 'N/A') +\
-                    "','" + card_color(entry.get('castcost', 'N/A'), entry['cardname'], entry.get('text', '')) +\
+                    "','" + entry.get('castcost', '-') +\
+                    "','" + card_color(entry.get('castcost', '-'), entry['cardname'], entry.get('text', '')) +\
                     "','" + str(entry.get('con_mana', 0)) +\
-                    "','" + entry.get('loyalty', 'N/A') +\
+                    "','" + entry.get('loyalty', '-') +\
                     "','" + entry['type'] +\
                     "','" + entry.get('power', '-') +\
                     "','" + entry.get('toughness', '-') +\
-                    "','" + entry.get('v_hand', 'N/A') +\
-                    "','" + entry.get('v_life', 'N/A') +\
+                    "','" + entry.get('v_hand', '-') +\
+                    "','" + entry.get('v_life', '-') +\
                     "','" + entry.get('printings', '???') +\
                     "','" + entry.get('text', '') + "')")
 

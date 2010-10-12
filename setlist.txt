@@ -65,8 +65,10 @@ Shards of Alara:ALA:2008-10-03
 Conflux:CON:2009-02-06
 Alara Reborn:ARB:2009-04-30
 Magic 2010:M10:2009-07-17
+Planechase:HOP:2009-09-04
 Zendikar:ZEN:2009-10-02
 Worldwake:WWK:2010-02-05
 Rise of the Eldrazi:ROE:2010-04-23
+Archenemy:ARC:2010-06-04
 Magic 2011:M11:2010-07-16
 Scars of Mirrodin:SOM:2010-10-01

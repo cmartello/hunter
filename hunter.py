@@ -1,7 +1,6 @@
 """hunter.py --- An alternative to WOTC's "Gatherer" """
 
 
-import sqlite3
 import re
 from re import search, match
 from sqlite3 import connect
@@ -13,18 +12,20 @@ def card_color(mana, cardname, text):
     text (for special cases like colored zero-cost spells and so forth.)
     Returns a text string that matches the card's color(s).'''
     color_letters = 'WUBRG'
-    color_names = {'black':'B', 'blue': 'U', 'green' : 'G', 'red' : 'R', 'white': 'W'}
+    color_names = {'black': 'B', 'blue': 'U', 'green': 'G', 'red': 'R', \
+        'white': 'W', 'colorless': '', 'all colors': 'WUBRG'}
     colors = ''
     clean_mana = [x.upper() for x in mana if x not in '0123456789()x/']
     for letter in color_letters:
         if clean_mana.count(letter) > 0:
             colors += letter
-    
-    searchstring = cardname + ' is (white|blue|black|red|green)'
-    regex = match(searchstring, text)
+
+    searchstring = cardname +\
+        ' is (white|blue|black|red|green|colorless|all colors)'
+    regex = search(searchstring, text)
     if regex is not None:
         if regex.group(1) in color_names.keys():
-            colors += color_names[regex.group(1)]
+            colors = color_names[regex.group(1)]
     return colors
 
 
@@ -96,13 +97,76 @@ class Hunter:
             'World', 'Basic', '//', 'Vanguard', 'Scheme', 'Plane',
             'Ongoing', ''])
 
+        # check to see what kind of file has been specified
+        res = search('(\.txt|\.db)$', filename)
+        if res.group(1) == '.txt':
+            self.parse_oracle(filename)
+        if res.group(1) == '.db':
+            self.dbase = connect(filename)
+
+        # close the .db if it's not autoload; this is so that sqlite and
+        # cherrypy don't fight.
+        if self.autoload == False:
+            self.dbase.close()
+        
+
+    def build_tables(self, connection, filename):
+        """Creates the tables that will be used in a typical Hunter databse."""
+
+        # create a table to identify the .db for later
+        connection.execute('''CREATE TABLE format
+            (
+                schema INTEGER,
+                basefile TEXT
+            ) ''')
+
+        connection.execute('''INSERT INTO format VALUES (20, "''' +\
+            filename + '")')
+
+        # create the 'cards' table
+        connection.execute('''CREATE TABLE cards
+            (
+                cardid INTEGER PRIMARY KEY AUTOINCREMENT,
+                cardname TEXT,
+                castcost TEXT,
+                color TEXT,
+                con_mana INTEGER,
+                loyalty TEXT,
+                type TEXT,
+                power TEXT,
+                toughness TEXT,
+                v_hand TEXT,
+                v_life TEXT,
+                printings TEXT,
+                cardtext TEXT
+            ) ''')
+
+        # create a table for publication data
+        connection.execute('''CREATE TABLE published
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT,
+                expansion TEXT,
+                rarity TEXT
+            ) ''')
+
+        # create a table for the setlist
+        connection.execute('''CREATE TABLE sets
+            (
+                abbreviation TEXT,
+                setname TEXT,
+                released TEXT
+            ) ''')
+
         # read a list of sets from setlist.txt
-        self.sets = dict()
         setlist = open('setlist.txt', 'r')
         for line in setlist:
+            # escape single quotes
+            line = line.replace("'", "''")
+
             # ignore blank lines
             regex = match('^$', line)
-            if regex is not None: 
+            if regex is not None:
                 continue
 
             # ignore comments
@@ -114,21 +178,32 @@ class Hunter:
             # abbreviation, and release date, all seperated by colons.
             regex = match('(.+):(.+):(.+)', line)
             if regex is not None:
-                self.sets[regex.group(2)] = (regex.group(1), regex.group(3))
+                connection.execute("INSERT INTO sets VALUES (" +\
+                    "'" + regex.group(2) +\
+                    "','" + regex.group(1) +\
+                    "','" + regex.group(3) +\
+                "')" )
 
-        # clean up, close the file
+        # close the setlist
         setlist.close()
 
-        # check to see what kind of file has been specified
-        res = search('(\.txt|\.db)$', filename)
-        if res.group(1) == '.txt':
-            self.parse_oracle(filename)
-        if res.group(1) == '.db':
-            self.dbname = filename
-            self.dbase = connect(filename)
+        # commit the DB and we're done.
+        connection.commit()
 
-        if self.autoload == False:
-            self.dbase.close()
+        return
+
+    
+    def publication_data(self, cardname, printings):
+        """Takes the cardname and list of printings, converts them to a
+        series of insertions for the published table."""
+
+        for set in printings.split(', '):
+            regex = match('(.+)-([LCURMS])', set)
+            self.dbase.execute("INSERT INTO published (name, expansion, rarity) VALUES ('" +\
+                cardname +\
+                "','" + regex.group(1) +\
+                "','" + regex.group(2) + "')")
+
 
     def parse_oracle(self, filename):
         """Parses an 'oracle' text file and converts it to a database.
@@ -145,32 +220,8 @@ class Hunter:
         self.dbname = filename.replace('.txt', '.db')
         self.dbase = connect(self.dbname)
 
-        # create a table to identify the .db for later
-        self.dbase.execute('''CREATE TABLE format
-            (
-                schema INTEGER,
-                basefile TEXT
-            ) ''')
-
-        self.dbase.execute('''INSERT INTO format VALUES (10, "''' + filename + '")')
-
-        # create the 'cards' table
-        self.dbase.execute('''CREATE TABLE cards
-            (
-                cardid INTEGER PRIMARY KEY AUTOINCREMENT,
-                cardname TEXT,
-                castcost TEXT,
-                color TEXT,
-                con_mana INTEGER,
-                loyalty TEXT,
-                type TEXT,
-                power TEXT,
-                toughness TEXT,
-                v_hand TEXT,
-                v_life TEXT,
-                printings TEXT,
-                cardtext TEXT
-            ) ''')
+        # build the tables
+        self.build_tables(self.dbase, filename)
 
         # state variables
         entline = 0
@@ -223,12 +274,12 @@ class Hunter:
             # match power/toughness -- if the card is a planeswalker, instead
             # put these data in as life/cards
             regex = match('^([0-9*+-]{1,3})\/([0-9*+-]{1,3})$', line)
-            type = search('(Creature|Vanguard)', entry.get('type', ''))
-            if regex is not None and type is not None:
-                if type.group(1) == 'Creature':
+            cardtype = search('(Creature|Vanguard)', entry.get('type', ''))
+            if regex is not None and cardtype is not None:
+                if cardtype.group(1) == 'Creature':
                     entry['power'] = regex.group(1)
                     entry['toughness'] = regex.group(2)
-                if type.group(1) == 'Vanguard':
+                if cardtype.group(1) == 'Vanguard':
                     entry['v_hand'] = regex.group(1)
                     entry['v_life'] = regex.group(2)
                 continue
@@ -242,21 +293,22 @@ class Hunter:
             # an empty line indicates the end of an entry
             regex = match('^$', line)
             if regex is not None:
-                self.dbase.execute("INSERT INTO cards ("+\
-                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, printings, cardtext"
+                self.dbase.execute("INSERT INTO cards (" +\
+                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cardtext"
                     ")values ('" +\
                     entry['cardname'] +\
-                    "','" + entry.get('castcost', 'N/A') +\
-                    "','" + card_color(entry.get('castcost', 'N/A'), entry['cardname'], entry.get('text', '')) +\
+                    "','" + entry.get('castcost', '-') +\
+                    "','" + card_color(entry.get('castcost', '-'), entry['cardname'], entry.get('text', '')) +\
                     "','" + str(entry.get('con_mana', 0)) +\
-                    "','" + entry.get('loyalty', 'N/A') +\
+                    "','" + entry.get('loyalty', '-') +\
                     "','" + entry['type'] +\
                     "','" + entry.get('power', '-') +\
                     "','" + entry.get('toughness', '-') +\
-                    "','" + entry.get('v_hand', 'N/A') +\
-                    "','" + entry.get('v_life', 'N/A') +\
-                    "','" + entry.get('printings', '???') +\
+                    "','" + entry.get('v_hand', '-') +\
+                    "','" + entry.get('v_life', '-') +\
                     "','" + entry.get('text', '') + "')")
+
+                self.publication_data(entry['cardname'], entry.get('printings', '???'))
 
                 #reset state, bump ID up
                 entry = dict()

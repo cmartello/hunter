@@ -131,6 +131,15 @@ class Hunter:
                 cardtext TEXT
             ) ''')
 
+        # create a table for publication data
+        connection.execute('''CREATE TABLE published
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT,
+                expansion TEXT,
+                rarity TEXT
+            ) ''')
+
         # create a table for the setlist
         connection.execute('''CREATE TABLE sets
             (
@@ -172,6 +181,18 @@ class Hunter:
         connection.commit()
 
         return
+
+    
+    def publication_data(self, cardname, printings):
+        """Takes the cardname and list of printings, converts them to a
+        series of insertions for the published table."""
+
+        for set in printings.split(', '):
+            regex = match('(.+)-([LCURMS])', set)
+            self.dbase.execute("INSERT INTO published (name, expansion, rarity) VALUES ('" +\
+                cardname +\
+                "','" + regex.group(1) +\
+                "','" + regex.group(2) + "')")
 
 
     def parse_oracle(self, filename):
@@ -263,7 +284,7 @@ class Hunter:
             regex = match('^$', line)
             if regex is not None:
                 self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, printings, cardtext"
+                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cardtext"
                     ")values ('" +\
                     entry['cardname'] +\
                     "','" + entry.get('castcost', '-') +\
@@ -275,8 +296,9 @@ class Hunter:
                     "','" + entry.get('toughness', '-') +\
                     "','" + entry.get('v_hand', '-') +\
                     "','" + entry.get('v_life', '-') +\
-                    "','" + entry.get('printings', '???') +\
                     "','" + entry.get('text', '') + "')")
+
+                self.publication_data(entry['cardname'], entry.get('printings', '???'))
 
                 #reset state, bump ID up
                 entry = dict()

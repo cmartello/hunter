@@ -177,6 +177,35 @@ class Hunter:
         # close the setlist
         setlist.close()
 
+        # create a table for legal sets for given formats
+        connection.execute('''CREATE TABLE legalsets
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                format TEXT,
+                expansion TEXT
+            )''')
+
+        # read in formats.txt, using it to fill the legalsets table
+        formats = open('formats.txt', 'r')
+
+        for line in formats:
+            # ignore blank lines
+            regex = match('^$', line)
+            if regex is not None:
+                continue
+
+            # ignore comments
+            regex = match('^#', line)
+            if regex is not None:
+                continue
+
+            (f, sets) = line.split(':')
+            for a in sets.split(','):
+                connection.execute("INSERT INTO legalsets (format,expansion) VALUES ('" + f + "','" + a + "')")
+
+        # close the formats file
+        formats.close()
+
         # commit the DB and we're done.
         connection.commit()
 

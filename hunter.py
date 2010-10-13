@@ -102,6 +102,7 @@ class Hunter:
         if res.group(1) == '.txt':
             self.parse_oracle(filename)
         if res.group(1) == '.db':
+            self.dbname = filename
             self.dbase = connect(filename)
 
         # close the .db if it's not autoload; this is so that sqlite and

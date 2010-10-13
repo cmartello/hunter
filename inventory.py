@@ -16,7 +16,7 @@ HTML_HEAD = '''
         <FORM action="search" method="get">
             <TABLE width=800>
                 <TR>
-                    <TD width=150><label for="query">Raw SQL query</LABEL>
+                    <TD width=150><label for="query">select * from cards where:</LABEL>
                     <TD><input type="text" name="query" size=100 />
                 </TR>
             </TABLE>
@@ -29,7 +29,7 @@ HTML_FOOT = '''
 
 TABLE_HEAD = '''
     <FORM action="update_inventory" method="get">
-        <TABLE width=850>
+        <TABLE width=850 border=1>
                 <TR>
                     <TH>#
                     <TH>Cardname
@@ -37,7 +37,6 @@ TABLE_HEAD = '''
                     <TH>Color
                     <TH>CMC
                     <TH>Type
-                    <TH>Printings
                     <TH>P/T/L
                 </TR>'''
 
@@ -49,11 +48,10 @@ TABLE_ROW = '''
                     <TD width=100 align=center>%s
                     <TD width=25 align=center>%d
                     <TD width=200 align=center>%s
-                    <TD width=150>%s
                     <TD width=* align=center>%s
                 </TR>'''
 # cardid, total in inventory, cardname, castcost, color, converted mana cost
-# type, printings, power/toughness or loyalty
+# type, power/toughness or loyalty
 
 
 TABLE_FOOT = '''
@@ -141,14 +139,8 @@ class Inventory:
             if search('planeswalker', row[6], re.I) is not None:
                 ptl = row[5]
 
-            # truncate long 'printings' lines
-            if len(row[11]) > 16:
-                printings = row[11][:16] + '...'
-            else:
-                printings = row[11]
-
             # add the formatted row to the output
-            output += (TABLE_ROW % (row[0], quantity, row[1], row[2], row[3], row[4], row[6], printings, ptl))
+            output += (TABLE_ROW % (row[0], quantity, row[1], row[2], row[3], row[4], row[6], ptl))
         
         # add the footers
         output += (TABLE_FOOT + HTML_FOOT)

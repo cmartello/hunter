@@ -67,6 +67,32 @@ def mana_cost(text):
     return int('0' + regex.group(1)) + len(regex.group(2)) + hybrid
 
 
+def filtered_file(filename, seperator = ':'):
+    """Returns an interator that automatically does three things with a
+    specified file:
+    * Turns apostrophes into SQLite's escaped apostrophes.
+    * Ignores blank lines and comments.
+    * Splits a line by the specified seperator icon. -- In this program, it's
+      always a colon.
+    """
+    for line in open(filename, 'r'):
+        # ignore blank lines
+        regex = match('^$', line)
+        if regex is not None:
+            continue
+
+        # ignore comments at the beginning of a line
+        regex = match('^#', line)
+        if regex is not None:
+            continue
+
+        # escape single quotes
+        line = line.replace("'", "''")
+
+        # split the line by the seperator and yield it
+        yield line.split(seperator)
+
+
 class Hunter:
     """The actual hunter object for making queries of the card databse, set
     up with an oracle .txt file or a database file that is simply loaded
@@ -160,33 +186,45 @@ class Hunter:
             ) ''')
 
         # read a list of sets from setlist.txt
-        setlist = open('setlist.txt', 'r')
-        for line in setlist:
-            # escape single quotes
-            line = line.replace("'", "''")
+        for data in filtered_file('setlist.txt'):
+            connection.execute("INSERT INTO sets VALUES (" +\
+                "'" + data[1] +\
+                "','" + data[0] +\
+                "','" + data[2] +\
+            "')" )
 
-            # ignore blank lines
-            regex = match('^$', line)
-            if regex is not None:
-                continue
+        # create a table for legal sets for given formats
+        connection.execute('''CREATE TABLE legalsets
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                format TEXT,
+                expansion TEXT
+            )''')
 
-            # ignore comments
-            regex = match('^#', line)
-            if regex is not None:
-                continue
+        # read in formats.txt, using it to fill the legalsets table
+        formats = open('formats.txt', 'r')
 
-            # a properly-formatted line consists of the set name, set
-            # abbreviation, and release date, all seperated by colons.
-            regex = match('(.+):(.+):(.+)', line)
-            if regex is not None:
-                connection.execute("INSERT INTO sets VALUES (" +\
-                    "'" + regex.group(2) +\
-                    "','" + regex.group(1) +\
-                    "','" + regex.group(3) +\
-                "')" )
+        for data in filtered_file('formats.txt'):
+            for set in data[1].split(','):
+                connection.execute("INSERT INTO legalsets (format,expansion) VALUES ('" + data[0] + "','" + set + "')")
 
-        # close the setlist
-        setlist.close()
+        # close the formats file
+        formats.close()
+
+        # create a table for banned/restricted cards
+        connection.execute('''CREATE TABLE badcards
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                format TEXT,
+                card TEXT,
+                status TEXT
+            ) ''')
+
+        # read in a list of banned/restricted cards
+        badcards = open('bans.txt', 'r')
+
+        for data in filtered_file('bans.txt'):
+            connection.execute('''INSERT INTO badcards (format,card,status) VALUES ('%s','%s','%s')''' % (data[0], data[1], data[2]))
 
         # commit the DB and we're done.
         connection.commit()

@@ -1,0 +1,125 @@
+# List of banned and restricted cards for Hunter.py.
+# File format is awkward, but it'll have to do; one line per card
+# format:status:cardname
+
+# Currently, the only formats are Standard, Extended, Legacy, and Vintage.
+# Vintage is the only format with restricted cards, all others use only
+# bans.
+
+Vintage:Banned:Amulet of Quoz
+Vintage:Banned:Bronze Tablet
+Vintage:Banned:Chaos Orb
+Vintage:Banned:Contract from Below
+Vintage:Banned:Darkpact
+Vintage:Banned:Demonic Attorney
+Vintage:Banned:Falling Star
+Vintage:Banned:Jeweled Bird
+Vintage:Banned:Rebirth
+Vintage:Banned:Shahrazad
+Vintage:Banned:Tempest Efreet
+Vintage:Banned:Timmerian Fiends
+Vintage:Restricted:Ancestral Recall
+Vintage:Restricted:Balance
+Vintage:Restricted:Black Lotus
+Vintage:Restricted:Brainstorm
+Vintage:Restricted:Burning Wish
+Vintage:Restricted:Channel
+Vintage:Restricted:Demonic Consultation
+Vintage:Restricted:Demonic Tutor
+Vintage:Restricted:Fact or Fiction
+Vintage:Restricted:Fastbond
+Vintage:Restricted:Flash
+Vintage:Restricted:Gifts Ungiven
+Vintage:Restricted:Imperial Seal
+Vintage:Restricted:Library of Alexandria
+Vintage:Restricted:Lion's Eye Diamond
+Vintage:Restricted:Lotus Petal
+Vintage:Restricted:Mana Crypt
+Vintage:Restricted:Mana Vault
+Vintage:Restricted:Memory Jar
+Vintage:Restricted:Merchant Scroll
+Vintage:Restricted:Mind's Desire
+Vintage:Restricted:Mox Emerald
+Vintage:Restricted:Mox Jet
+Vintage:Restricted:Mox Pearl
+Vintage:Restricted:Mox Ruby
+Vintage:Restricted:Mox Sapphire
+Vintage:Restricted:Mystical Tutor
+Vintage:Restricted:Necropotence
+Vintage:Restricted:Ponder
+Vintage:Restricted:Regrowth
+Vintage:Restricted:Sol Ring
+Vintage:Restricted:Strip Mine
+Vintage:Restricted:Thirst for Knowledge
+Vintage:Restricted:Time Vault
+Vintage:Restricted:Time Walk
+Vintage:Restricted:Timetwister
+Vintage:Restricted:Tinker
+Vintage:Restricted:Tolarian Academy
+Vintage:Restricted:Trinisphere
+Vintage:Restricted:Vampiric Tutor
+Vintage:Restricted:Wheel of Fortune
+Vintage:Restricted:Windfall
+Vintage:Restricted:Yawgmoth's Bargain
+Vintage:Restricted:Yawgmoth's Will
+Legacy:Banned:Ancestral Recall
+Legacy:Banned:Balance
+Legacy:Banned:Bazaar of Baghdad
+Legacy:Banned:Black Lotus
+Legacy:Banned:Black Vise
+Legacy:Banned:Bronze Tablet
+Legacy:Banned:Channel
+Legacy:Banned:Chaos Orb
+Legacy:Banned:Contract from Below
+Legacy:Banned:Darkpact
+Legacy:Banned:Demonic Attorney
+Legacy:Banned:Demonic Consultation
+Legacy:Banned:Demonic Tutor
+Legacy:Banned:Earthcraft
+Legacy:Banned:Falling Star
+Legacy:Banned:Fastbond
+Legacy:Banned:Flash
+Legacy:Banned:Frantic Search
+Legacy:Banned:Goblin Recruiter
+Legacy:Banned:Gush
+Legacy:Banned:Hermit Druid
+Legacy:Banned:Imperial Seal
+Legacy:Banned:Jeweled Bird
+Legacy:Banned:Land Tax
+Legacy:Banned:Library of Alexandria
+Legacy:Banned:Mana Crypt
+Legacy:Banned:Mana Drain
+Legacy:Banned:Mana Vault
+Legacy:Banned:Memory Jar
+Legacy:Banned:Mind Twist
+Legacy:Banned:Mind's Desire
+Legacy:Banned:Mishra's Workshop
+Legacy:Banned:Mox Emerald
+Legacy:Banned:Mox Jet
+Legacy:Banned:Mox Pearl
+Legacy:Banned:Mox Ruby
+Legacy:Banned:Mox Sapphire
+Legacy:Banned:Mystical Tutor
+Legacy:Banned:Necropotence
+Legacy:Banned:Oath of Druids
+Legacy:Banned:Rebirth
+Legacy:Banned:Shahrazad
+Legacy:Banned:Skullclamp
+Legacy:Banned:Sol Ring
+Legacy:Banned:Strip Mine
+Legacy:Banned:Tempest Efreet
+Legacy:Banned:Time Spiral
+Legacy:Banned:Time Vault
+Legacy:Banned:Time Walk
+Legacy:Banned:Timetwister
+Legacy:Banned:Timmerian Fiends
+Legacy:Banned:Tinker
+Legacy:Banned:Tolarian Academy
+Legacy:Banned:Vampiric Tutor
+Legacy:Banned:Wheel of Fortune
+Legacy:Banned:Windfall
+Legacy:Banned:Worldgorger Dragon
+Legacy:Banned:Yawgmoth's Bargain
+Legacy:Banned:Yawgmoth's Will
+
+# there are currently no banned cards in standard or extended.

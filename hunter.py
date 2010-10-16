@@ -206,6 +206,35 @@ class Hunter:
         # close the formats file
         formats.close()
 
+        # create a table for banned/restricted cards
+        connection.execute('''CREATE TABLE badcards
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                format TEXT,
+                card TEXT,
+                status TEXT
+            ) ''')
+
+        # read in a list of banned/restricted cards
+        badcards = open('bans.txt', 'r')
+
+        for line in badcards:
+            # ignore blank lines
+            regex = match('^$', line)
+            if regex is not None:
+                continue
+
+            # ignore comments
+            regex = match('^#', line)
+            if regex is not None:
+                continue
+
+            # escape single quotes
+            line = line.replace("'", "''")
+            
+            (format, card, status) = line.split(':')
+            connection.execute('''INSERT INTO badcards (format,card,status) VALUES ('%s','%s','%s')''' % (format, card, status))
+
         # commit the DB and we're done.
         connection.commit()
 

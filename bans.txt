@@ -32,13 +32,13 @@ Vintage:Restricted:Flash
 Vintage:Restricted:Gifts Ungiven
 Vintage:Restricted:Imperial Seal
 Vintage:Restricted:Library of Alexandria
-Vintage:Restricted:Lion’s Eye Diamond
+Vintage:Restricted:Lion's Eye Diamond
 Vintage:Restricted:Lotus Petal
 Vintage:Restricted:Mana Crypt
 Vintage:Restricted:Mana Vault
 Vintage:Restricted:Memory Jar
 Vintage:Restricted:Merchant Scroll
-Vintage:Restricted:Mind’s Desire
+Vintage:Restricted:Mind's Desire
 Vintage:Restricted:Mox Emerald
 Vintage:Restricted:Mox Jet
 Vintage:Restricted:Mox Pearl
@@ -60,8 +60,8 @@ Vintage:Restricted:Trinisphere
 Vintage:Restricted:Vampiric Tutor
 Vintage:Restricted:Wheel of Fortune
 Vintage:Restricted:Windfall
-Vintage:Restricted:Yawgmoth’s Bargain
-Vintage:Restricted:Yawgmoth’s Will
+Vintage:Restricted:Yawgmoth's Bargain
+Vintage:Restricted:Yawgmoth's Will
 Legacy:Banned:Ancestral Recall
 Legacy:Banned:Balance
 Legacy:Banned:Bazaar of Baghdad

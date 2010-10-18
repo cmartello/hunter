@@ -225,8 +225,8 @@ class Hunter:
 
         for expansion in printings.split(', '):
             regex = match('(.+)-([LCURMS])', expansion)
-            self.dbase.execute("INSERT INTO published (name, expansion, rarity"+\
-                ") VALUES ('" + cardname +\
+            self.dbase.execute("INSERT INTO published " +\
+                "(name, expansion, rarity) VALUES ('" + cardname +\
                 "','" + regex.group(1) +\
                 "','" + regex.group(2) + "')")
 
@@ -320,7 +320,7 @@ class Hunter:
             regex = match('^$', line)
             if regex is not None:
                 self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cardtext"
+                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cardtext" +\
                     ")values ('" +\
                     entry['cardname'] +\
                     "','" + entry.get('castcost', '-') +\

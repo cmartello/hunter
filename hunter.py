@@ -93,6 +93,99 @@ def filtered_file(filename, seperator = ':'):
         yield line.split(seperator)
 
 
+
+def build_tables(connection, filename):
+    """Creates the tables that will be used in a typical Hunter databse."""
+
+    # create a table to identify the .db for later
+    connection.execute('''CREATE TABLE format
+        (
+            schema INTEGER,
+            basefile TEXT
+        ) ''')
+
+    connection.execute('''INSERT INTO format VALUES (20, "''' + filename + '")')
+
+    # create the 'cards' table
+    connection.execute('''CREATE TABLE cards
+        (
+            cardid INTEGER PRIMARY KEY AUTOINCREMENT,
+            cardname TEXT,
+            castcost TEXT,
+            color TEXT,
+            con_mana INTEGER,
+            loyalty TEXT,
+            type TEXT,
+            power TEXT,
+            toughness TEXT,
+            v_hand TEXT,
+            v_life TEXT,
+            printings TEXT,
+            cardtext TEXT
+        ) ''')
+
+    # create a table for publication data
+    connection.execute('''CREATE TABLE published
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            expansion TEXT,
+            rarity TEXT
+        ) ''')
+
+    # create a table for the setlist
+    connection.execute('''CREATE TABLE sets
+        (
+            abbreviation TEXT,
+            setname TEXT,
+            released TEXT
+        ) ''')
+
+    # read a list of sets from setlist.txt
+    for data in filtered_file('setlist.txt'):
+        connection.execute("INSERT INTO sets VALUES (" +\
+            "'" + data[1] +\
+            "','" + data[0] +\
+            "','" + data[2] +\
+            "')" )
+
+    # create a table for legal sets for given formats
+    connection.execute('''CREATE TABLE legalsets
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            format TEXT,
+            expansion TEXT
+        )''')
+
+    # read in formats.txt, using it to fill the legalsets table
+    formats = open('formats.txt', 'r')
+
+    for data in filtered_file('formats.txt'):
+        for expansion in data[1].split(','):
+            connection.execute("INSERT INTO legalsets (format,expansion) " +\
+                "VALUES ('" + data[0] + "','" + expansion + "')")
+
+    # close the formats file
+    formats.close()
+
+    # create a table for banned/restricted cards
+    connection.execute('''CREATE TABLE badcards
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            format TEXT,
+            card TEXT,
+            status TEXT
+        ) ''')
+
+    # read in a list of banned/restricted cards
+    for data in filtered_file('bans.txt'):
+        connection.execute('''INSERT INTO badcards (format,card,status) ''' +\
+            '''VALUES ('%s','%s','%s')''' % (data[0], data[1], data[2]))
+
+    # commit the DB and we're done.
+    connection.commit()
+
+
 class Hunter:
     """The actual hunter object for making queries of the card databse, set
     up with an oracle .txt file or a database file that is simply loaded
@@ -125,110 +218,15 @@ class Hunter:
         if res.group(1) == '.db':
             self.dbase = connect(filename)
 
-
-    def build_tables(self, connection, filename):
-        """Creates the tables that will be used in a typical Hunter databse."""
-
-        # create a table to identify the .db for later
-        connection.execute('''CREATE TABLE format
-            (
-                schema INTEGER,
-                basefile TEXT
-            ) ''')
-
-        connection.execute('''INSERT INTO format VALUES (20, "''' +\
-            filename + '")')
-
-        # create the 'cards' table
-        connection.execute('''CREATE TABLE cards
-            (
-                cardid INTEGER PRIMARY KEY AUTOINCREMENT,
-                cardname TEXT,
-                castcost TEXT,
-                color TEXT,
-                con_mana INTEGER,
-                loyalty TEXT,
-                type TEXT,
-                power TEXT,
-                toughness TEXT,
-                v_hand TEXT,
-                v_life TEXT,
-                printings TEXT,
-                cardtext TEXT
-            ) ''')
-
-        # create a table for publication data
-        connection.execute('''CREATE TABLE published
-            (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
-                expansion TEXT,
-                rarity TEXT
-            ) ''')
-
-        # create a table for the setlist
-        connection.execute('''CREATE TABLE sets
-            (
-                abbreviation TEXT,
-                setname TEXT,
-                released TEXT
-            ) ''')
-
-        # read a list of sets from setlist.txt
-        for data in filtered_file('setlist.txt'):
-            connection.execute("INSERT INTO sets VALUES (" +\
-                "'" + data[1] +\
-                "','" + data[0] +\
-                "','" + data[2] +\
-            "')" )
-
-        # create a table for legal sets for given formats
-        connection.execute('''CREATE TABLE legalsets
-            (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                format TEXT,
-                expansion TEXT
-            )''')
-
-        # read in formats.txt, using it to fill the legalsets table
-        formats = open('formats.txt', 'r')
-
-        for data in filtered_file('formats.txt'):
-            for set in data[1].split(','):
-                connection.execute("INSERT INTO legalsets (format,expansion) VALUES ('" + data[0] + "','" + set + "')")
-
-        # close the formats file
-        formats.close()
-
-        # create a table for banned/restricted cards
-        connection.execute('''CREATE TABLE badcards
-            (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                format TEXT,
-                card TEXT,
-                status TEXT
-            ) ''')
-
-        # read in a list of banned/restricted cards
-        badcards = open('bans.txt', 'r')
-
-        for data in filtered_file('bans.txt'):
-            connection.execute('''INSERT INTO badcards (format,card,status) VALUES ('%s','%s','%s')''' % (data[0], data[1], data[2]))
-
-        # commit the DB and we're done.
-        connection.commit()
-
-        return
-
     
     def publication_data(self, cardname, printings):
         """Takes the cardname and list of printings, converts them to a
         series of insertions for the published table."""
 
-        for set in printings.split(', '):
-            regex = match('(.+)-([LCURMS])', set)
-            self.dbase.execute("INSERT INTO published (name, expansion, rarity) VALUES ('" +\
-                cardname +\
+        for expansion in printings.split(', '):
+            regex = match('(.+)-([LCURMS])', expansion)
+            self.dbase.execute("INSERT INTO published (name, expansion, rarity"+\
+                ") VALUES ('" + cardname +\
                 "','" + regex.group(1) +\
                 "','" + regex.group(2) + "')")
 
@@ -249,7 +247,7 @@ class Hunter:
         self.dbase = connect(dbname)
 
         # build the tables
-        self.build_tables(self.dbase, filename)
+        build_tables(self.dbase, filename)
 
         # state variables
         entline = 0

@@ -268,7 +268,20 @@ class Hunter:
 
             # match a casting cost
             regex = match(\
-                '^(X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+(| // (X{1,2}|)([WUBRG0-9]|\([wubrg2]\/[wubrg]\))+)$', line)
+                '''^(
+                        X{1,2}| #match 1 or 2 'x's at the beginning
+                    )
+                    (
+                        [WUBRG0-9]|\([wubrg2]\/[wubrg]\) # all digits, mana
+                    )+
+                    (|\s//\s    # break for split cards, repeat above
+                        (
+                            X{1,2}|
+                        )
+                        (
+                            [WUBRG0-9]|\([wubrg2]\/[wubrg]\)
+                        )+
+                    )$''', line, re.X)
             if regex is not None:
                 # Don't overwrite casting cost if its already there
                 if entry.get('castcost') == None:

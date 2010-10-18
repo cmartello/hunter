@@ -185,6 +185,16 @@ def build_tables(connection, filename):
     # commit the DB and we're done.
     connection.commit()
 
+def printings_data(connection, cardname, printings):
+    """Takes the cardname and list of printings, converts them to a series of 
+    insertions for the 'published' table."""
+
+    for expansion in printings.split(', '):
+        regex = match('(.+)-([LCURMS])', expansion)
+        connection.execute("INSERT INTO published "+\
+        "(name, expansion, rarity) VALUES ('%s','%s','%s')"\
+        % (cardname, regex.group(1), regex.group(2) ))
+
 
 class Hunter:
     """The actual hunter object for making queries of the card databse, set
@@ -218,18 +228,6 @@ class Hunter:
         if res.group(1) == '.db':
             self.dbase = connect(filename)
 
-    
-    def publication_data(self, cardname, printings):
-        """Takes the cardname and list of printings, converts them to a
-        series of insertions for the published table."""
-
-        for expansion in printings.split(', '):
-            regex = match('(.+)-([LCURMS])', expansion)
-            self.dbase.execute("INSERT INTO published " +\
-                "(name, expansion, rarity) VALUES ('" + cardname +\
-                "','" + regex.group(1) +\
-                "','" + regex.group(2) + "')")
-
 
     def parse_oracle(self, filename):
         """Parses an 'oracle' text file and converts it to a database.
@@ -250,8 +248,7 @@ class Hunter:
         build_tables(self.dbase, filename)
 
         # state variables
-        entline = 0
-        entry = dict()
+        entry, entline = dict(), 0
 
         # parsing loop
         for line in oracle.readlines():
@@ -347,11 +344,11 @@ class Hunter:
                     "','" + entry.get('v_life', '-') +\
                     "','" + entry.get('text', '') + "')")
 
-                self.publication_data(entry['cardname'], entry.get('printings', '???'))
+                printings_data(self.dbase,\
+                    entry['cardname'], entry.get('printings', '???'))
 
                 #reset state, bump ID up
-                entry = dict()
-                entline = 0
+                entry, entline = dict(), 0
                 continue
 
             # if the line doesn't match anything else, it's card text.

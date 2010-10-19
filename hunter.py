@@ -330,11 +330,13 @@ class Hunter:
             regex = match('^$', line)
             if regex is not None:
                 self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cardtext" +\
+                    "cardname, castcost, color, con_mana, loyalty, type,"+\
+                    "power, toughness, v_hand, v_life, cardtext" +\
                     ")values ('" +\
                     entry['cardname'] +\
                     "','" + entry.get('castcost', '-') +\
-                    "','" + card_color(entry.get('castcost', '-'), entry['cardname'], entry.get('text', '')) +\
+                    "','" + card_color(entry.get('castcost', '-'), \
+                        entry['cardname'], entry.get('text', '')) +\
                     "','" + str(entry.get('con_mana', 0)) +\
                     "','" + entry.get('loyalty', '-') +\
                     "','" + entry['type'] +\
@@ -344,7 +346,7 @@ class Hunter:
                     "','" + entry.get('v_life', '-') +\
                     "','" + entry.get('text', '') + "')")
 
-                printings_data(self.dbase,\
+                printings_data(self.dbase, \
                     entry['cardname'], entry.get('printings', '???'))
 
                 #reset state, bump ID up

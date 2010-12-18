@@ -67,7 +67,7 @@ def mana_cost(text):
     return int('0' + regex.group(1)) + len(regex.group(2)) + hybrid
 
 
-def filtered_file(filename, seperator = ':'):
+def filtered_file(filename, seperator=':'):
     """Returns an interator that automatically does three things with a
     specified file:
     * Turns apostrophes into SQLite's escaped apostrophes.
@@ -93,7 +93,6 @@ def filtered_file(filename, seperator = ':'):
         yield line.split(seperator)
 
 
-
 def build_tables(connection, filename):
     """Creates the tables that will be used in a typical Hunter databse."""
 
@@ -104,7 +103,7 @@ def build_tables(connection, filename):
             basefile TEXT
         ) ''')
 
-    connection.execute('''INSERT INTO format VALUES (20, "''' + filename + '")')
+    connection.execute("INSERT INTO format VALUES (20, \"" + filename + "\")")
 
     # create the 'cards' table
     connection.execute('''CREATE TABLE cards
@@ -147,7 +146,7 @@ def build_tables(connection, filename):
             "'" + data[1] +\
             "','" + data[0] +\
             "','" + data[2] +\
-            "')" )
+            "')")
 
     # create a table for legal sets for given formats
     connection.execute('''CREATE TABLE legalsets
@@ -185,15 +184,16 @@ def build_tables(connection, filename):
     # commit the DB and we're done.
     connection.commit()
 
+
 def printings_data(connection, cardname, printings):
-    """Takes the cardname and list of printings, converts them to a series of 
+    """Takes the cardname and list of printings, converts them to a series of
     insertions for the 'published' table."""
 
     for expansion in printings.split(', '):
         regex = match('(.+)-([LCURMS])', expansion)
-        connection.execute("INSERT INTO published "+\
+        connection.execute("INSERT INTO published " +\
         "(name, expansion, rarity) VALUES ('%s','%s','%s')"\
-        % (cardname, regex.group(1), regex.group(2) ))
+        % (cardname, regex.group(1), regex.group(2)))
 
 
 class Hunter:
@@ -227,7 +227,6 @@ class Hunter:
             self.parse_oracle(filename)
         if res.group(1) == '.db':
             self.dbase = connect(filename)
-
 
     def parse_oracle(self, filename):
         """Parses an 'oracle' text file and converts it to a database.
@@ -330,7 +329,7 @@ class Hunter:
             regex = match('^$', line)
             if regex is not None:
                 self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type,"+\
+                    "cardname, castcost, color, con_mana, loyalty, type," +\
                     "power, toughness, v_hand, v_life, cardtext" +\
                     ")values ('" +\
                     entry['cardname'] +\

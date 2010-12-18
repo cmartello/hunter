@@ -179,7 +179,7 @@ def build_tables(connection, filename):
 
     # read in a list of banned/restricted cards
     for data in filtered_file('bans.txt'):
-        connection.execute('''INSERT INTO badcards (format,card,status) ''' +\
+        connection.execute('''INSERT INTO badcards (format,status,card) ''' +\
             '''VALUES ('%s','%s','%s')''' % (data[0], data[1], data[2]))
 
     # commit the DB and we're done.

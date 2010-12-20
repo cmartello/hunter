@@ -67,6 +67,68 @@ def mana_cost(text):
     return int('0' + regex.group(1)) + len(regex.group(2)) + hybrid
 
 
+def determine_cgroup(user):
+    """Determines roughly what group a given card should be in for the
+    purpose of figuring collector numbers returns an integer to tell
+    what group.
+    """
+
+    # dict for color->group mapping
+    colors = {'W': 20, 'U': 30, 'B': 40, 'R': 50, 'G': 60, \
+        'WU': 0, 'UB': 1, 'BR': 2, 'RG': 3, 'WG': 4,\
+        'WB': 5, 'UR': 6, 'BG': 7, 'WR': 8, 'UG': 9,\
+        'WUB': 10, 'UBR': 11, 'BRG': 12, 'WRG': 13, 'WUG': 14,\
+        'WUBRG': 15}
+
+
+    # basic colors (W=20, U=30, B=40, R=50, G=60)
+    if len(user.get('color')) == 1:
+        return colors[user.get('color')]
+
+    # colorless artifacts
+    if user.get('color') == '':
+        if re.search('Artifact', user.get('type')) is not None:
+            return 130
+
+    # basic lands
+    if re.search('Basic', user.get('type')) is not None:
+        return 150
+
+    # other lands
+    if re.search('Land', user.get('type')) is not None:
+        return 140
+
+    # split cards
+    if re.search('\/\/', user.get('cardname')) is not None:
+        return 120
+
+    # cards with hybrid mana
+    if re.search('\(([wubrg]|\d)\\/[wubrg]\)', user.get('castcost', '')) is not None:
+
+        # special cases for Shadowmoor, Eventide, and Alara Reborn
+        if re.search('(SHM|EVE|ARB)-', user.get('printings')) is not None:
+            # Monocolored hybrid just counts as the usual color.
+            if len(user.get('color', None)) == 1:
+                return colors[user.get('color')]
+
+            # Multicolored stuff goes in a particular order for these sets
+            if len(user.get('color')) == 2 or len(user.get('color')) == 3:
+                return colors[user.get('color')] + 100
+
+        # Default is group 100
+        return 100
+
+    # group 10 -- eldrazi
+    if re.search('Eldrazi', user.get('type')) is not None:
+        return 10
+
+    # default (unimplemented stuff, usually basic multicolor.)
+    # special case for Alara Reborn
+    if re.search('ARB', user.get('printings')) is not None:
+        return 70 + colors[user.get('color')]
+    return 70
+
+
 def filtered_file(filename, seperator=':'):
     """Returns an interator that automatically does three things with a
     specified file:
@@ -103,7 +165,7 @@ def build_tables(connection, filename):
             basefile TEXT
         ) ''')
 
-    connection.execute("INSERT INTO format VALUES (20, \"" + filename + "\")")
+    connection.execute('''INSERT INTO format VALUES (25, "''' + filename + '")')
 
     # create the 'cards' table
     connection.execute('''CREATE TABLE cards
@@ -119,7 +181,7 @@ def build_tables(connection, filename):
             toughness TEXT,
             v_hand TEXT,
             v_life TEXT,
-            printings TEXT,
+            cn_position INTEGER,
             cardtext TEXT
         ) ''')
 
@@ -328,14 +390,15 @@ class Hunter:
             # an empty line indicates the end of an entry
             regex = match('^$', line)
             if regex is not None:
+                entry['color'] = card_color(entry.get('castcost', '-'), entry['cardname'], entry.get('text', ''))
+                # determine roughly where the card should be sorted to
+                entry['cn_position'] = determine_cgroup(entry)
                 self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type," +\
-                    "power, toughness, v_hand, v_life, cardtext" +\
+                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cn_position, cardtext" +\
                     ")values ('" +\
                     entry['cardname'] +\
                     "','" + entry.get('castcost', '-') +\
-                    "','" + card_color(entry.get('castcost', '-'), \
-                        entry['cardname'], entry.get('text', '')) +\
+                    "','" + entry.get('color') +\
                     "','" + str(entry.get('con_mana', 0)) +\
                     "','" + entry.get('loyalty', '-') +\
                     "','" + entry['type'] +\
@@ -343,6 +406,7 @@ class Hunter:
                     "','" + entry.get('toughness', '-') +\
                     "','" + entry.get('v_hand', '-') +\
                     "','" + entry.get('v_life', '-') +\
+                    "','" + str(entry.get('cn_position', 0)) +\
                     "','" + entry.get('text', '') + "')")
 
                 printings_data(self.dbase, \

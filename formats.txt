@@ -1,8 +1,8 @@
 # A list of formats and the sets that they currently consist of, to be
 # parsed by hunter.py
 
-Standard:ZEN,WWK,ROE,M11,SOM
-Extended:LRW,MOR,SHM,EVE,ALA,CON,ARB,ZEN,WWK,ROE,SOM,M10,M11
+Standard:ZEN,WWK,ROE,M11,SOM,MBS,NPH
+Extended:LRW,MOR,SHM,EVE,ALA,CON,ARB,ZEN,WWK,ROE,SOM,M10,M11,MBS,NPH
 
 # Sadly, Legacy and Vintage need lists here if only to exclude certain sets
 # like Vanguard, Planechase, and Archenemy.  Since the non-special cards in

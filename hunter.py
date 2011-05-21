@@ -42,7 +42,7 @@ def mana_cost(text):
     nohy = ''
     cost = text.replace('(', ')').split(')')
     for token in cost:
-        regex = match('[wubrg]/[wubrg]', token)
+        regex = match('[wubrg]/[wubrgp]', token)
         if regex != None:
             hybrid += 1
             continue

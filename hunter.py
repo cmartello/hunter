@@ -330,7 +330,7 @@ class Hunter:
                         X{1,2}| #match 1 or 2 'x's at the beginning
                     )
                     (
-                        [WUBRG0-9]|\([wubrg2]\/[wubrg]\) # all digits, mana
+                        [WUBRG0-9]|\([wubrg2]\/[wubrgp]\) # all digits, mana
                     )+
                     (|\s//\s    # break for split cards, repeat above
                         (

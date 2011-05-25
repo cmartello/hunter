@@ -85,10 +85,12 @@ def determine_cgroup(user):
     if len(user.get('color')) == 1:
         return colors[user.get('color')]
 
-    # colorless artifacts
+    # colorless cards -- artifacts go to 130, non artifacts and non-lands get 10
     if user.get('color') == '':
         if re.search('Artifact', user.get('type')) is not None:
             return 130
+        if re.search('(Artifact|Land)', user.get('type')) is None:
+            return 10
 
     # basic lands
     if re.search('Basic', user.get('type')) is not None:
@@ -117,10 +119,6 @@ def determine_cgroup(user):
 
         # Default is group 100
         return 100
-
-    # group 10 -- eldrazi
-    if re.search('Eldrazi', user.get('type')) is not None:
-        return 10
 
     # default (unimplemented stuff, usually basic multicolor.)
     # special case for Alara Reborn

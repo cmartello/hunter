@@ -122,4 +122,6 @@ Legacy:Banned:Worldgorger Dragon
 Legacy:Banned:Yawgmoth's Bargain
 Legacy:Banned:Yawgmoth's Will
 
-# there are currently no banned cards in standard or extended.
+# Standard Bans, effective 2011-JUL-01
+Standard:Banned:Jace, the Mind Sculptor
+Standard:Banned:Stoneforge Mystic

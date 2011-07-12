@@ -74,3 +74,4 @@ Magic 2011:M11:2010-07-16
 Scars of Mirrodin:SOM:2010-10-01
 Mirrodin Besiged:MBS:2011-02-04
 New Phyrexia:NPH:2011-05-13
+Magic 2012:M12:2011-07-15

@@ -121,5 +121,7 @@ Legacy:Banned:Windfall
 Legacy:Banned:Worldgorger Dragon
 Legacy:Banned:Yawgmoth's Bargain
 Legacy:Banned:Yawgmoth's Will
+
+# Standard Bans, effective 2011-JUL-01
 Standard:Banned:Jace, the Mind Sculptor
 Standard:Banned:Stoneforge Mystic

@@ -251,9 +251,14 @@ def printings_data(connection, cardname, printings):
 
     for expansion in printings.split(', '):
         regex = match('(.+)-([LCURMS])', expansion)
-        connection.execute("INSERT INTO published " +\
-        "(name, expansion, rarity) VALUES ('%s','%s','%s')"\
-        % (cardname, regex.group(1), regex.group(2)))
+        if regex is not None:
+            connection.execute("INSERT INTO published " +\
+            "(name, expansion, rarity) VALUES ('%s','%s','%s')"\
+            % (cardname, regex.group(1), regex.group(2)))
+        else:
+            connection.execute("INSERT INTO published " +\
+            "(name, expansion, rarity) VALUES ('%s', '%s', '%s')"\
+            % (cardname, '???', '???'))
 
 
 class Hunter:

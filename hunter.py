@@ -392,6 +392,12 @@ class Hunter:
 
             # an empty line indicates the end of an entry
             regex = match('^$', line)
+
+            # if we hit an empty line with no cardname skip ahead and try again
+            if regex is not None and entry['cardname'] == '':
+                entry, entline = dict(), 0
+                continue
+
             if regex is not None:
                 entry['color'] = card_color(entry.get('castcost', '-'), entry['cardname'], entry.get('text', ''))
                 # determine roughly where the card should be sorted to

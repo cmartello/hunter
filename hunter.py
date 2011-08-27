@@ -80,12 +80,11 @@ def determine_cgroup(user):
         'WUB': 10, 'UBR': 11, 'BRG': 12, 'WRG': 13, 'WUG': 14,\
         'WUBRG': 15}
 
-
     # basic colors (W=20, U=30, B=40, R=50, G=60)
     if len(user.get('color')) == 1:
         return colors[user.get('color')]
 
-    # colorless cards -- artifacts go to 130, non artifacts and non-lands get 10
+    # colorless cards; artifacts go to 130, non artifacts and non-lands get 10
     if user.get('color') == '':
         if re.search('Artifact', user.get('type')) is not None:
             return 130
@@ -105,7 +104,8 @@ def determine_cgroup(user):
         return 120
 
     # cards with hybrid mana
-    if re.search('\(([wubrg]|\d)\\/[wubrg]\)', user.get('castcost', '')) is not None:
+    if re.search('\(([wubrg]|\d)\\/[wubrg]\)', user.get('castcost', ''))\
+        is not None:
 
         # special cases for Shadowmoor, Eventide, and Alara Reborn
         if re.search('(SHM|EVE|ARB)-', user.get('printings')) is not None:
@@ -163,7 +163,8 @@ def build_tables(connection, filename):
             basefile TEXT
         ) ''')
 
-    connection.execute('''INSERT INTO format VALUES (25, "''' + filename + '")')
+    connection.execute('''INSERT INTO format VALUES (25, "''' + filename + \
+        '")')
 
     # create the 'cards' table
     connection.execute('''CREATE TABLE cards
@@ -399,12 +400,14 @@ class Hunter:
                 continue
 
             if regex is not None:
-                entry['color'] = card_color(entry.get('castcost', '-'), entry['cardname'], entry.get('text', ''))
+                entry['color'] = card_color(entry.get('castcost', '-'), \
+                    entry['cardname'], entry.get('text', ''))
                 # determine roughly where the card should be sorted to
                 entry['cn_position'] = determine_cgroup(entry)
                 self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type, power, toughness, v_hand, v_life, cn_position, cardtext" +\
-                    ")values ('" +\
+                    "cardname, castcost, color, con_mana, loyalty, type," +\
+                    "power, toughness, v_hand, v_life, cn_position," +\
+                    "cardtext)values ('" +\
                     entry['cardname'] +\
                     "','" + entry.get('castcost', '-') +\
                     "','" + entry.get('color') +\

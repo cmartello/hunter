@@ -2,7 +2,7 @@
 # File format is awkward, but it'll have to do; one line per card
 # format:status:cardname
 
-# Currently, the only formats are Standard, Extended, Legacy, and Vintage.
+# Currently, the formats are Standard, Extended, Legacy, and Vintage, Modern.
 # Vintage is the only format with restricted cards, all others use only
 # bans.
 
@@ -125,3 +125,26 @@ Legacy:Banned:Yawgmoth's Will
 # Standard Bans, effective 2011-JUL-01
 Standard:Banned:Jace, the Mind Sculptor
 Standard:Banned:Stoneforge Mystic
+
+# Modern Bans
+Modern:Banned:Ancestral Vision
+Modern:Banned:Ancient Den
+Modern:Banned:Bitterblossom
+Modern:Banned:Chrome Mox
+Modern:Banned:Dark Depths
+Modern:Banned:Dread Return
+Modern:Banned:Glimpse of Nature
+Modern:Banned:Golgari Grave-Troll
+Modern:Banned:Great Furnace
+Modern:Banned:Hypergenesis
+Modern:Banned:Jace, the Mind Sculptor
+Modern:Banned:Mental Misstep
+Modern:Banned:Seat of the Synod
+Modern:Banned:Sensei's Divining Top
+Modern:Banned:Skullclamp
+Modern:Banned:Stoneforge Mystic
+Modern:Banned:Sword of the Meek
+Modern:Banned:Tree of Tales
+Modern:Banned:Umezawa's Jitte
+Modern:Banned:Valakut, the Molten Pinnacle
+Modern:Banned:Vault of Whispers

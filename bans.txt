@@ -26,7 +26,8 @@ Vintage:Restricted:Burning Wish
 Vintage:Restricted:Channel
 Vintage:Restricted:Demonic Consultation
 Vintage:Restricted:Demonic Tutor
-Vintage:Restricted:Fact or Fiction
+# No longer restricted as of 2011-OCT-01
+# Vintage:Restricted:Fact or Fiction
 Vintage:Restricted:Fastbond
 Vintage:Restricted:Flash
 Vintage:Restricted:Gifts Ungiven
@@ -122,6 +123,9 @@ Legacy:Banned:Worldgorger Dragon
 Legacy:Banned:Yawgmoth's Bargain
 Legacy:Banned:Yawgmoth's Will
 
+# Legacy ban, effective 2011-OCT-01
+Legacy:Banned:Mental Misstep
+
 # Standard Bans, effective 2011-JUL-01
 Standard:Banned:Jace, the Mind Sculptor
 Standard:Banned:Stoneforge Mystic
@@ -148,3 +152,18 @@ Modern:Banned:Tree of Tales
 Modern:Banned:Umezawa's Jitte
 Modern:Banned:Valakut, the Molten Pinnacle
 Modern:Banned:Vault of Whispers
+
+# Modern bans effective 2011-OCT-01
+Modern:Banned:Blazing Shoal
+Modern:Banned:Cloudpost
+Modern:Banned:Green Sun's Zenith
+Modern:Banned:Ponder
+Modern:Banned:Preordain
+Modern:Banned:Rite of Flame
+
+# Extended bans effective 2011-OCT-01
+Extended:Banned:Jace, the Mind Sculptor
+Extended:Banned:Mental Misstep
+Extended:Banned:Ponder
+Extended:Banned:Preordain
+Extended:Banned:Stoneforge Mystic

@@ -20,12 +20,20 @@ def card_color(mana, cardname, text):
         if clean_mana.count(letter) > 0:
             colors += letter
 
+    # basic "cardname is (color) text search
     searchstring = cardname +\
         ' is (white|blue|black|red|green|colorless|all colors)'
     regex = search(searchstring, text)
     if regex is not None:
         if regex.group(1) in color_names.keys():
             colors = color_names[regex.group(1)]
+
+    # look for Innistrad color indicators (on reverse sides of DSCs)
+    regex = search('\[(.+) color indicator', text)
+    if regex is not None:
+        for word in regex.group(1).lower().split('/'):
+            colors += color_names[word]
+
     return colors
 
 

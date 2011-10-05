@@ -127,8 +127,9 @@ Legacy:Banned:Yawgmoth's Will
 Legacy:Banned:Mental Misstep
 
 # Standard Bans, effective 2011-JUL-01
-Standard:Banned:Jace, the Mind Sculptor
-Standard:Banned:Stoneforge Mystic
+# Lifted as of 2011-10-01 as these sets are out of standard
+#Standard:Banned:Jace, the Mind Sculptor
+#Standard:Banned:Stoneforge Mystic
 
 # Modern Bans
 Modern:Banned:Ancestral Vision

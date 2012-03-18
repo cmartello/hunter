@@ -38,10 +38,11 @@ def card_color(mana, cardname, text):
 
 
 def mana_cost(text):
-    '''Accepts a text string that matches the (awful) regular expression
+    """Accepts a text string that matches the (awful) regular expression
     of a mana cost and returns an integer for the converted mana cost of
     a spell.
-    '''
+    """
+
     # strip Xs from cost
     text = text.replace('X', '')
 

@@ -77,3 +77,4 @@ New Phyrexia:NPH:2011-05-13
 Commander:CMD:2011-06-17
 Magic 2012:M12:2011-07-15
 Innistrad:ISD:2011-09-30
+Dark Ascension:DKA:2012-02-03

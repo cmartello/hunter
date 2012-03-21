@@ -3,6 +3,8 @@
 # format:status:cardname
 
 # Currently, the formats are Standard, Extended, Legacy, and Vintage, Modern.
+# Block formats are the initialism of the first set in the block and the
+# the word "Block" right after.  ex: ISDBlock.
 # Vintage is the only format with restricted cards, all others use only
 # bans.
 
@@ -131,6 +133,37 @@ Legacy:Banned:Mental Misstep
 #Standard:Banned:Jace, the Mind Sculptor
 #Standard:Banned:Stoneforge Mystic
 
+# Block-constructed bans
+IABlock:Banned:Amulet of Quoz
+IABlock:Banned:Thawing Glaciers
+IABlock:Banned:Zuran Orb
+
+MIBlock:Banned:Squandered Resources
+
+TEBlock:Banned:Cursed Scroll
+
+USBlock:Banned:Windfall
+USBlock:Banned:Voltaic Key
+USBlock:Banned:Tolarian Academy
+USBlock:Banned:Time Spiral
+USBlock:Banned:Serra's Sanctum
+USBlock:Banned:Memory Jar
+USBlock:Banned:Gaea's Cradle
+
+MMBlock:Banned:Rishadan Port
+MMBlock:Banned:Lin Sivvi, Defiant Hero
+
+MRDBlock:Banned:Skullclamp
+MRDBlock:Banned:Vault of Whispers
+MRDBlock:Banned:Tree of Tales
+MRDBlock:Banned:Seat of the Synod
+MRDBlock:Banned:Great Furnace
+MRDBlock:Banned:Disciple of the Vault
+MRDBlock:Banned:Darksteel Citadel
+MRDBlock:Banned:Arcbound Ravager
+MRDBlock:Banned:Ancient Den
+MRDBlock:Banned:AEther Vial
+
 # Modern Bans
 Modern:Banned:Ancestral Vision
 Modern:Banned:Ancient Den
@@ -172,3 +205,7 @@ Extended:Banned:Mental Misstep
 Extended:Banned:Ponder
 Extended:Banned:Preordain
 Extended:Banned:Stoneforge Mystic
+
+# Innistrad Block bans effective 2012-APR-01
+ISDBlock:Banned:Intangible Virtue
+ISDBlock:Banned:Lingering Souls

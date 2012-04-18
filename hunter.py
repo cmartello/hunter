@@ -171,8 +171,7 @@ def build_tables(connection, filename):
             basefile TEXT
         ) ''')
 
-    connection.execute('''INSERT INTO format VALUES (25, "''' + filename + \
-        '")')
+    connection.execute('INSERT INTO format VALUES (25, ?)', (filename,))
 
     # create the 'cards' table
     connection.execute('''CREATE TABLE cards
@@ -211,11 +210,8 @@ def build_tables(connection, filename):
 
     # read a list of sets from setlist.txt
     for data in filtered_file('setlist.txt'):
-        connection.execute("INSERT INTO sets VALUES (" +\
-            "'" + data[1] +\
-            "','" + data[0] +\
-            "','" + data[2] +\
-            "')")
+        connection.execute('INSERT INTO sets VALUES (?, ?, ?)', \
+            (data[1], data[0], data[2]))
 
     # create a table for legal sets for given formats
     connection.execute('''CREATE TABLE legalsets
@@ -230,8 +226,8 @@ def build_tables(connection, filename):
 
     for data in filtered_file('formats.txt'):
         for expansion in data[1].split(','):
-            connection.execute("INSERT INTO legalsets (format,expansion) " +\
-                "VALUES ('" + data[0] + "','" + expansion + "')")
+            connection.execute('INSERT INTO legalsets (format, expansion) ' +\
+                'VALUES (?, ?)', (data[0], expansion))
 
     # close the formats file
     formats.close()
@@ -247,8 +243,8 @@ def build_tables(connection, filename):
 
     # read in a list of banned/restricted cards
     for data in filtered_file('bans.txt'):
-        connection.execute('''INSERT INTO badcards (format,status,card) ''' +\
-            '''VALUES ('%s','%s','%s')''' % (data[0], data[1], data[2]))
+        connection.execute('INSERT INTO badcards (format, status, card) ' +\
+            'VALUES (?,?,?)', (data[0], data[1], data[2]))
 
     # commit the DB and we're done.
     connection.commit()
@@ -261,13 +257,11 @@ def printings_data(connection, cardname, printings):
     for expansion in printings.split(', '):
         regex = match('(.+)-([LCURMS])', expansion)
         if regex is not None:
-            connection.execute("INSERT INTO published " +\
-            "(name, expansion, rarity) VALUES ('%s','%s','%s')"\
-            % (cardname, regex.group(1), regex.group(2)))
+            connection.execute('INSERT INTO published (name, expansion, rarity)' +\
+            'VALUES (?, ?, ?)', (cardname, regex.group(1), regex.group(2)))
         else:
-            connection.execute("INSERT INTO published " +\
-            "(name, expansion, rarity) VALUES ('%s', '%s', '%s')"\
-            % (cardname, '???', '???'))
+            connection.execute('INSERT INTO published (name, expansion, rarity)' +\
+            'VALUES (?, ?, ?)', (cardname, '???', '???'))
 
 
 class Hunter:
@@ -412,22 +406,22 @@ class Hunter:
                     entry['cardname'], entry.get('text', ''))
                 # determine roughly where the card should be sorted to
                 entry['cn_position'] = determine_cgroup(entry)
-                self.dbase.execute("INSERT INTO cards (" +\
-                    "cardname, castcost, color, con_mana, loyalty, type," +\
-                    "power, toughness, v_hand, v_life, cn_position," +\
-                    "cardtext)values ('" +\
-                    entry['cardname'] +\
-                    "','" + entry.get('castcost', '-') +\
-                    "','" + entry.get('color') +\
-                    "','" + str(entry.get('con_mana', 0)) +\
-                    "','" + entry.get('loyalty', '-') +\
-                    "','" + entry['type'] +\
-                    "','" + entry.get('power', '-') +\
-                    "','" + entry.get('toughness', '-') +\
-                    "','" + entry.get('v_hand', '-') +\
-                    "','" + entry.get('v_life', '-') +\
-                    "','" + str(entry.get('cn_position', 0)) +\
-                    "','" + entry.get('text', '') + "')")
+
+                self.dbase.execute('INSERT INTO cards (cardname, castcost,' +\
+                    'color, con_mana, loyalty, type, power, toughness, v_hand,' +\
+                    'v_life, cn_position, cardtext) values ' +\
+                    '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (entry['cardname'], \
+                    entry.get('castcost', '-'), \
+                    entry.get('color'), \
+                    entry.get('con_mana', 0), \
+                    entry.get('loyalty', '-'), \
+                    entry['type'], \
+                    entry.get('power', '-'), \
+                    entry.get('toughness', '-'), \
+                    entry.get('v_hand', '-'), \
+                    entry.get('v_life', '-'), \
+                    str(entry.get('cn_position', 0)), \
+                    entry.get('text', '')))
 
                 printings_data(self.dbase, \
                     entry['cardname'], entry.get('printings', '???'))

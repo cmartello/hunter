@@ -1,6 +1,6 @@
-Hunter -- A Free Alternative to Gatherer
+Hunter -- A MTG card database program.
 
-At present, Hunter is a simple Python script that turns a flat Oracle test file
+At present, Hunter is a simple Python script that turns a flat Oracle text file
 into a SQLite databse.  It's fairly crude at this time and still needs all
 kinds of testing.  It *works*, but it's only useful to developers right now;
 so if you need a database of cards and you're comfortable with searching

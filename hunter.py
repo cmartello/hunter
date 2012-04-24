@@ -137,10 +137,24 @@ def determine_cgroup(user):
     return 70
 
 
+def oneblank(filename):
+    """Returns an iterator that filters extra blank lines from the
+    specified file.  Kind of a hack :(
+    """
+
+    for line in open(filename, 'r'):
+        if match('^$', line) is not None:
+            if blanks == 0:
+                yield line
+            blanks += 1
+        else:
+            yield line
+            blanks = 0
+
+
 def filtered_file(filename, seperator=':'):
     """Returns an interator that automatically does three things with a
     specified file:
-    * Turns apostrophes into SQLite's escaped apostrophes.
     * Ignores blank lines and comments.
     * Splits a line by the specified seperator icon. -- In this program, it's
       always a colon.
@@ -155,9 +169,6 @@ def filtered_file(filename, seperator=':'):
         regex = match('^#', line)
         if regex is not None:
             continue
-
-        # escape single quotes
-        line = line.replace("'", "''")
 
         # split the line by the seperator and yield it
         yield line.split(seperator)
@@ -307,7 +318,7 @@ class Hunter:
         """
 
         # open up the original file
-        oracle = open(filename, 'r')
+        oracle = oneblank(filename)
 
         # create the database
         dbname = filename.replace('.txt', '.db')
@@ -320,12 +331,9 @@ class Hunter:
         entry, entline = dict(), 0
 
         # parsing loop
-        for line in oracle.readlines():
+        for line in oracle:
             entline += 1
             line = line[:-1]
-
-            # escape single quotes
-            line = line.replace("'", "''")
 
             # the first line of an entry is ALWAYS the name of the card
             if entline == 1:

@@ -323,9 +323,6 @@ class Hunter:
             entline += 1
             line = line[:-1]
 
-            # escape single quotes
-            line = line.replace("'", "''")
-
             # the first line of an entry is ALWAYS the name of the card
             if entline == 1:
                 entry['cardname'] = line

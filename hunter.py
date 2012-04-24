@@ -139,7 +139,6 @@ def determine_cgroup(user):
 def filtered_file(filename, seperator=':'):
     """Returns an interator that automatically does three things with a
     specified file:
-    * Turns apostrophes into SQLite's escaped apostrophes.
     * Ignores blank lines and comments.
     * Splits a line by the specified seperator icon. -- In this program, it's
       always a colon.
@@ -154,9 +153,6 @@ def filtered_file(filename, seperator=':'):
         regex = match('^#', line)
         if regex is not None:
             continue
-
-        # escape single quotes
-        line = line.replace("'", "''")
 
         # split the line by the seperator and yield it
         yield line.split(seperator)

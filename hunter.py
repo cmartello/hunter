@@ -3,6 +3,7 @@
 
 import re
 from re import search, match
+import sqlite3
 from sqlite3 import connect
 from sys import argv
 
@@ -436,6 +437,19 @@ class Hunter:
 
         # commit the table to the db
         self.dbase.commit()
+
+
+    def query(self, sql):
+        """Performs a SQL query on the data connection and returns the
+        cursor to the caller.  In the event of an error, it returns
+        an error message as a string."""
+
+        try:
+            results = self.dbase.execute(sql)
+        except sqlite3.OperationalError as error:
+            return 'sqlite3.OperationalError', error.message
+        else:
+            return results
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ if __name__ == '__main__':
     setlist = db.query('SELECT abbreviation FROM sets ORDER BY released')
 
     for exp in setlist:
-        cardlist = db.dbase.execute('SELECT name FROM published JOIN cards ON cards.cardname = published.name WHERE published.expansion = ? ORDER BY cards.cn_position, published.name', (exp[0],))
+        cardlist = db.dbase.execute('SELECT name FROM published JOIN cards ON cards.cardname = published.name WHERE published.expansion = ? AND cards.virtual = ? ORDER BY cards.cn_position, published.name', (exp[0], 'No'))
 
         y = 1
         for x in cardlist:

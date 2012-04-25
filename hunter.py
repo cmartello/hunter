@@ -293,12 +293,12 @@ def is_virtual(entry):
         return 'Yes: ' + regex.group(1)
 
     # search for Kamigawa flip cards
-    regex = search('\[Flips into (.+)\]', entry['text'])
+    regex = search('\[Flips from (.+)\]', entry['text'])
     if regex is not None:
         return 'Yes: ' + regex.group(1)
 
     # search for Innistrad shapeshifters
-    regex = search('\[(.+) Back face. Transforms into (.+)\.\]', entry['text'])
+    regex = search('\[(|.+)Back face. Transforms into (.+)\.\]', entry['text'])
     if regex is not None:
         return 'Yes: ' + regex.group(2)
 

@@ -184,7 +184,7 @@ def build_tables(connection, filename):
             basefile TEXT
         ) ''')
 
-    connection.execute('INSERT INTO format VALUES (25, ?)', (filename,))
+    connection.execute('INSERT INTO format VALUES (26, ?)', (filename,))
 
     # create the 'cards' table
     connection.execute('''CREATE TABLE cards
@@ -201,6 +201,7 @@ def build_tables(connection, filename):
             v_hand TEXT,
             v_life TEXT,
             cn_position INTEGER,
+            virtual TEXT,
             cardtext TEXT
         ) ''')
 
@@ -275,6 +276,33 @@ def printings_data(connection, cardname, printings):
         else:
             connection.execute('INSERT INTO published (name, expansion, rarity)' +\
             'VALUES (?, ?, ?)', (cardname, '???', '???'))
+
+
+def is_virtual(entry):
+    """Examines a card's text to determine if it is a 'virtual' card such as
+    * Either half of a split card (Invasion, Apocalypse, etc.)
+    * The 'levelled up' version of a legendary creatre (Kamigawa block)
+    * A shapeshifter from Innistrad block."""
+
+    if entry.get('text', '') == '':
+        return 'No'
+
+    # search for Invasion split cards
+    regex = search('\[This is half of the split card (.+)\]', entry['text'])
+    if regex is not None:
+        return 'Yes: ' + regex.group(1)
+
+    # search for Kamigawa flip cards
+    regex = search('\[Flips into (.+)\]', entry['text'])
+    if regex is not None:
+        return 'Yes: ' + regex.group(1)
+
+    # search for Innistrad shapeshifters
+    regex = search('\[(.+) Back face. Transforms into (.+)\.\]', entry['text'])
+    if regex is not None:
+        return 'Yes: ' + regex.group(2)
+
+    return 'No'
 
 
 class Hunter:
@@ -414,13 +442,17 @@ class Hunter:
             if regex is not None:
                 entry['color'] = card_color(entry.get('castcost', '-'), \
                     entry['cardname'], entry.get('text', ''))
+
                 # determine roughly where the card should be sorted to
                 entry['cn_position'] = determine_cgroup(entry)
 
+                # determine if the card is a 'virtual card'
+                entry['virtual'] = is_virtual(entry)
+
                 self.dbase.execute('INSERT INTO cards (cardname, castcost,' +\
                     'color, con_mana, loyalty, type, power, toughness, v_hand,' +\
-                    'v_life, cn_position, cardtext) values ' +\
-                    '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (entry['cardname'], \
+                    'v_life, cn_position, virtual, cardtext) values ' +\
+                    '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (entry['cardname'], \
                     entry.get('castcost', '-'), \
                     entry.get('color'), \
                     entry.get('con_mana', 0), \
@@ -431,6 +463,7 @@ class Hunter:
                     entry.get('v_hand', '-'), \
                     entry.get('v_life', '-'), \
                     str(entry.get('cn_position', 0)), \
+                    entry.get('virtual', 'no'), \
                     entry.get('text', '')))
 
                 printings_data(self.dbase, \

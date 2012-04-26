@@ -2,6 +2,11 @@ from hunter import Hunter
 
 if __name__ == '__main__':
     db = Hunter('All Sets-2012-02-05.db')
+
+    db.dbase.execute('CREATE INDEX cnames ON cards (cardname);')
+    db.dbase.execute('CREATE INDEX pubexp ON published (expansion);')
+    db.dbase.execute('CREATE INDEX pubnames ON published (name);')
+
     setlist = db.query('SELECT abbreviation FROM sets ORDER BY released')
 
     for exp in setlist:

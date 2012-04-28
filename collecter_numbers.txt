@@ -14,16 +14,22 @@ Notes on collector numbers:
         Land
     - Hybrid cards may be numbered differently in Lorwyn as opposed to 
       a standard order
+      (This has been handled)
+
     - Alara Reborn is all multicolored and uses a different numbering scheme.
       So far as I can tell, the two-colored section is much like any other set
       where the first color clockwise indicates where it belongs.
+      (This has been handled)
+
     - Cross-color cards (and three-color cards) are ordered differently also.
+      (This has been handled)
 
 - Sets before a certain point don't have thier own official numbers. 
 	- As it turns out, there's a couple ways that they are assigned:
 		- On Gatherer, they are simply numbered in alphabetical order
 		- On magiccards.info, they're numbered by color, then by name.  
           Note that it uses the BUGRW color order.
+    ( Still undecided as to how this should best be resolved)
 
 - Some cards have multiple artwork.
     - Basic lands have multiple art, but each gets their own collector number.
@@ -40,3 +46,6 @@ Notes on collector numbers:
     - The full version of split cards do exist within the Oracle file.
     - Each half of the split card also has its own entry, clearly marked.
     - Inverse parts of flip cards are also clearly marked.
+    ( These have been handled; reverse sides of double-faced/flip cards and
+    the single portions of invasion-era split cards are marked as "virtual"
+    and this aren't assigned collector numbers. )

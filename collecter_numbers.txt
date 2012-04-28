@@ -49,3 +49,9 @@ Notes on collector numbers:
     ( These have been handled; reverse sides of double-faced/flip cards and
     the single portions of invasion-era split cards are marked as "virtual"
     and this aren't assigned collector numbers. )
+
+- Timeshifted cards
+    - Time Spiral has these cards in their own special rarity.
+    - Planar Chaos and Future Sight have their own style of timeshifted cards
+      that are incorporated in the set.  The only way to handle these will be
+      with their own special lists.

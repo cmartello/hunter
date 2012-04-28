@@ -211,7 +211,8 @@ def build_tables(connection, filename):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             expansion TEXT,
-            rarity TEXT
+            rarity TEXT,
+            cnum INTEGER
         ) ''')
 
     # create a table for the setlist

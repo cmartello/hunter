@@ -261,6 +261,19 @@ def build_tables(connection, filename):
         connection.execute('INSERT INTO badcards (format, status, card) ' +\
             'VALUES (?,?,?)', (data[0], data[1], data[2]))
 
+    # create a table listing timeshifted cards
+    connection.execute('''CREATE TABLE timeshifted
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            expansion TEXT,
+            card TEXT
+        ) ''')
+
+    # read in the list of timeshifted cards and insert them
+    for data in filtered_file('timeshifted.txt'):
+        connection.execute('INSERT INTO timeshifted (expansion, card) ' +\
+            'VALUES (?,?)', (data[0], data[1]))
+
     # commit the DB and we're done.
     connection.commit()
 

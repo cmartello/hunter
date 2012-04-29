@@ -11,8 +11,8 @@ if __name__ == '__main__':
 
     for exp in setlist:
         # special case for time spiral
-        if exp[0] = 'TSP':
-            cardlist = db.dbase.execute('SELECT DISTINCT published.name,published.rarity FROM published JOIN cards ON cards.cardname = published.name WHERE published.expansion = ? AND cards.virtual = ? ORDER BY CASE published.rarity WHEN 'S' THEN 2 ELSE 1 END,cards.cn_position, published.name', (exp[0], 'No')
+        if exp[0] == 'TSP':
+            cardlist = db.dbase.execute('SELECT DISTINCT published.name,published.rarity FROM published JOIN cards ON cards.cardname = published.name WHERE published.expansion = ? AND cards.virtual = ? ORDER BY CASE published.rarity WHEN ? THEN 2 ELSE 1 END,cards.cn_position, published.name', (exp[0], 'No', 'S'))
 
         # all other sets
         else:

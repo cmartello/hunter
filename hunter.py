@@ -90,28 +90,36 @@ def determine_cgroup(user):
         'WUB': 10, 'UBR': 11, 'BRG': 12, 'WRG': 13, 'WUG': 14,\
         'WUBRG': 15}
 
+    # handle timeshifted cards
+    ts = 0
+    if search('(PLC|FUT)', user.get('printings', 'None')) is not None:
+        print 'planar chaos or future sight card.'
+        if user['cardname'] in determine_cgroup.timeshifted:
+            ts = 5
+            print 'timeshifted:', user['cardname']
+
     # basic colors (W=20, U=30, B=40, R=50, G=60)
     if len(user.get('color')) == 1:
-        return colors[user.get('color')]
+        return colors[user.get('color')] + ts
 
     # colorless cards; artifacts go to 130, non artifacts and non-lands get 10
     if user.get('color') == '':
         if re.search('Artifact', user.get('type')) is not None:
-            return 130
+            return 130 + ts
         if re.search('(Artifact|Land)', user.get('type')) is None:
-            return 10
+            return 10 + ts
 
     # basic lands
     if re.search('Basic', user.get('type')) is not None:
-        return 150
+        return 150 + ts
 
     # other lands
     if re.search('Land', user.get('type')) is not None:
-        return 140
+        return 140 + ts
 
     # split cards
     if re.search('\/\/', user.get('cardname')) is not None:
-        return 120
+        return 120 + ts
 
     # cards with hybrid mana
     if re.search('\(([wubrg]|\d)\\/[wubrg]\)', user.get('castcost', ''))\
@@ -121,20 +129,20 @@ def determine_cgroup(user):
         if re.search('(SHM|EVE|ARB)-', user.get('printings')) is not None:
             # Monocolored hybrid just counts as the usual color.
             if len(user.get('color', None)) == 1:
-                return colors[user.get('color')]
+                return colors[user.get('color')] + ts
 
             # Multicolored stuff goes in a particular order for these sets
             if len(user.get('color')) == 2 or len(user.get('color')) == 3:
-                return colors[user.get('color')] + 100
+                return colors[user.get('color')] + 100 + ts
 
         # Default is group 100
-        return 100
+        return 100 + ts
 
     # default (unimplemented stuff, usually basic multicolor.)
     # special case for Alara Reborn
     if re.search('ARB', user.get('printings')) is not None:
-        return 70 + colors[user.get('color')]
-    return 70
+        return 70 + colors[user.get('color')] + ts
+    return 70 + ts
 
 
 def oneblank(filename):
@@ -158,6 +166,7 @@ def filtered_file(filename, seperator=':'):
     * Ignores blank lines and comments.
     * Splits a line by the specified seperator icon. -- In this program, it's
       always a colon.
+    * chomps newlines
     """
     for line in open(filename, 'r'):
         # ignore blank lines
@@ -169,6 +178,10 @@ def filtered_file(filename, seperator=':'):
         regex = match('^#', line)
         if regex is not None:
             continue
+
+        # trim the newline
+        if line[-1] == '\n':
+            line = line[:-1]
 
         # split the line by the seperator and yield it
         yield line.split(seperator)
@@ -269,10 +282,14 @@ def build_tables(connection, filename):
             card TEXT
         ) ''')
 
+    # add the 'timeshifted' set to the determine_cgroup function
+    determine_cgroup.timeshifted = set()
+
     # read in the list of timeshifted cards and insert them
     for data in filtered_file('timeshifted.txt'):
         connection.execute('INSERT INTO timeshifted (expansion, card) ' +\
             'VALUES (?,?)', (data[0], data[1]))
+        determine_cgroup.timeshifted.add(data[1])
 
     # commit the DB and we're done.
     connection.commit()

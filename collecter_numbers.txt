@@ -58,3 +58,5 @@ Notes on collector numbers:
     - Planar Chaos and Future Sight have their own style of timeshifted cards
       that are incorporated in the set.  The only way to handle these will be
       with their own special lists.
+    ( These have been handled in a messy manner.  And it's still up in the air
+    as to if I did it right or not :) )

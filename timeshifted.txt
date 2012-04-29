@@ -1,0 +1,131 @@
+# list of 'timeshifted' cards to have their cn_position bumped up by 5
+# format is   set:cardname
+
+# planar chaos
+PLC:Calciderm
+PLC:Malach of the Dawn
+PLC:Mana Tithe
+PLC:Mesa Enchantress
+PLC:Mycologist
+PLC:Porphyry Nodes
+PLC:Revered Dead
+PLC:Sinew Sliver
+PLC:Sunlance
+PLC:Frozen AEther
+PLC:Gossamer Phantasm
+PLC:Ovinize
+PLC:Piracy Charm
+PLC:Primal Plasma
+PLC:Riptide Pilferer
+PLC:Serendib Sorcerer
+PLC:Serra Sphinx
+PLC:Bog Serpent
+PLC:Damnation
+PLC:Dunerider Outlaw
+PLC:Kor Dirge
+PLC:Melancholy
+PLC:Null Profusion
+PLC:Rathi Trapper
+PLC:Shrouded Lore
+PLC:Vampiric Link
+PLC:Blood Knight
+PLC:Brute Force
+PLC:Molten Firebird
+PLC:Proodigal Pyromancer
+PLC:Pyrohemia
+PLC:Reckless Wurm
+PLC:Shivan Wumpus
+PLC:Simian Spirit Guide
+PLC:Skirk Shaman
+PLC:Essence Warden
+PLC:Fa'adiyah Seer
+PLC:gaea's Anthem
+PLC:Groundbreaker
+PLC:Harmonize
+PLC:Healing Leaves
+PLC:Hedge Troll
+PLC:Keen Sense
+PLC:Seal of Primordium
+
+# future sight
+FUT:Aven Mindcensor
+FUT:Blade of the Sixth Pride
+FUT:Bound in Silence
+FUT:Daybreak Coronet
+FUT:Goldmeadow Lookout
+FUT:Imperial Mask
+FUT:Lucent Liminid
+FUT:Lumithread Field
+FUT:Lymph Sliver
+FUT:Mistmeadow Skulk
+FUT:Oriss, Samite Guardian
+FUT:Patrician's Scorn
+FUT:Ramosian Revivalist
+FUT:Seht's Tiger
+FUT:Arcanum Wings
+FUT:Blind Phantasm
+FUT:Bonded Fetch
+FUT:Linessa, Zephyr Sage
+FUT:Logic Knot
+FUT:Mesmeric Sliver
+FUT:Narcomoeba
+FUT:Nix
+FUT:Sarcomite Myr
+FUT:Second Wind
+FUT:Shapeshifter's Marrow
+FUT:Spellweaver Volute
+FUT:Spin into Myth
+FUT:Vedalken AEthermage
+FUT:Whip-Spine Drake
+FUT:Bitter Ordeal
+FUT:Bridge from Below
+FUT:Death Rattle
+FUT:Deepcavern Imp
+FUT:Fleshwrither
+FUT:Frenzy Sliver
+FUT:Grave Scrabbler
+FUT:Korlash, Heir to Blackblade
+FUT:Mass of Ghouls
+FUT:Snake Cult Initiation
+FUT:Street Wraith
+FUT:Tombstalker
+FUT:Witch's Mist
+FUT:Yixlid Jailer
+FUT:Bloodshot Trainee
+FUT:Boldwyr Intimidator
+FUT:Emblem of the Warmind
+FUT:Flowstone Embrace
+FUT:Fomori Nomad
+FUT:Ghostfire
+FUT:Grinning Ingus
+FUT:Henchfiend of Ukor
+FUT:Homing Sliver
+FUT:Shah of Naar Isle
+FUT:Skizzik Surger
+FUT:Steamflogger Boss
+FUT:Storm Entity
+FUT:Tarox Bladewing
+FUT:Thunderblade Charge
+FUT:Baru, Fist of Krosa
+FUT:Centaur Omenreader
+FUT:Edge of Autumn
+FUT:Imperiosaur
+FUT:Muraganda Petroglyphs
+FUT:Nacatl War-Pride
+FUT:Nessian Courser
+FUT:Phosphorescent Feast
+FUT:Quagnoth
+FUT:Spellwild Ouphie
+FUT:Sporoloth Ancient
+FUT:Tarmogoyf
+FUT:Thornweald Archer
+FUT:Virulent Sliver
+FUT:Darksteel Garrison
+FUT:Whetwheel
+FUT:Dryad Arbor
+FUT:Graven Cairns
+FUT:Grove of the Burnwillows
+FUT:Horizon Canopy
+FUT:Nimbus Maze
+FUT:River of Tears
+FUT:Zoetic Cavern

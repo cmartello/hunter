@@ -93,10 +93,8 @@ def determine_cgroup(user):
     # handle timeshifted cards
     ts = 0
     if search('(PLC|FUT)', user.get('printings', 'None')) is not None:
-        print 'planar chaos or future sight card.'
         if user['cardname'] in determine_cgroup.timeshifted:
             ts = 5
-            print 'timeshifted:', user['cardname']
 
     # basic colors (W=20, U=30, B=40, R=50, G=60)
     if len(user.get('color')) == 1:

@@ -39,7 +39,7 @@ PLC:Simian Spirit Guide
 PLC:Skirk Shaman
 PLC:Essence Warden
 PLC:Fa'adiyah Seer
-PLC:gaea's Anthem
+PLC:Gaea's Anthem
 PLC:Groundbreaker
 PLC:Harmonize
 PLC:Healing Leaves

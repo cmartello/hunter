@@ -23,7 +23,7 @@ def card_color(mana, cardname, text):
 
     # basic "cardname is (color) text search
     searchstring = cardname +\
-        ' is (white|blue|black|red|green|colorless|all colors)'
+        ' is (white|blue|black|red|green|all colors)'
     regex = search(searchstring, text)
     if regex is not None:
         if regex.group(1) in color_names.keys():
@@ -334,6 +334,39 @@ def is_virtual(entry):
     return 'No'
 
 
+def collector_numbers(db):
+    """Calculates collector numbers and updates the 'published' table of
+    the supplied databse with that information.  This isn't the best
+    possible process given that we're using SQLite, but it will work for
+    now."""
+
+    # create indicies to make the important queries much faster.
+    db.dbase.execute('CREATE INDEX IF NOT EXISTS cnames ON cards (cardname);')
+    db.dbase.execute('CREATE INDEX IF NOT EXISTS pubexp ON published (expansion);')
+    db.dbase.execute('CREATE INDEX IF NOT EXISTS pubnames ON published (name);')
+
+    # get a cursor of the list of sets in the db
+    setlist = db.dbase.execute('SELECT abbreviation FROM sets ORDER BY released')
+
+    # HACK -- planar chaos split cards
+    for scard in ['Boom // Bust', 'Dead // Gone', 'Rough // Tumble']:
+        db.dbase.execute('UPDATE cards SET cn_position = 54 WHERE cards.cardname = ?', (scard,))
+
+    for expansion in setlist:
+        # special case for time spiral
+        if expansion[0] == 'TSP':
+            cardlist = db.dbase.execute('SELECT DISTINCT published.name,published.rarity FROM published JOIN cards ON cards.cardname = published.name WHERE published.expansion = ? AND cards.virtual = ? ORDER BY CASE published.rarity WHEN ? THEN 2 ELSE 1 END,cards.cn_position, published.name', (expansion[0], 'No', 'S'))
+
+        # other sets
+        else:
+            cardlist = db.dbase.execute('SELECT DISTINCT published.name FROM published JOIN cards ON cards.cardname = published.name WHERE published.expansion = ? AND cards.virtual = ? ORDER BY cards.cn_position, published.name', (expansion[0], 'No'))
+
+        cardnumber = 1
+        for card in cardlist:
+            db.dbase.execute('UPDATE published SET cnum = ? WHERE published.name = ? AND published.expansion = ?', (cardnumber, card[0], expansion[0]) )
+            cardnumber += 1
+
+
 class Hunter:
     """The actual hunter object for making queries of the card databse, set
     up with an oracle .txt file or a database file that is simply loaded
@@ -528,3 +561,5 @@ if __name__ == "__main__":
         exit(1)
 
     TEST = Hunter(argv[1])
+    collector_numbers(TEST)
+    TEST.dbase.commit()

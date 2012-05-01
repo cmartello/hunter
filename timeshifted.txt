@@ -97,7 +97,7 @@ FUT:Emblem of the Warmind
 FUT:Flowstone Embrace
 FUT:Fomori Nomad
 FUT:Ghostfire
-FUT:Grinning Ingus
+FUT:Grinning Ignus
 FUT:Henchfiend of Ukor
 FUT:Homing Sliver
 FUT:Shah of Naar Isle

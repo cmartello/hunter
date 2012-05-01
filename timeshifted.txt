@@ -31,7 +31,7 @@ PLC:Vampiric Link
 PLC:Blood Knight
 PLC:Brute Force
 PLC:Molten Firebird
-PLC:Proodigal Pyromancer
+PLC:Prodigal Pyromancer
 PLC:Pyrohemia
 PLC:Reckless Wurm
 PLC:Shivan Wumpus

@@ -9,6 +9,10 @@ if __name__ == '__main__':
 
     setlist = db.query('SELECT abbreviation FROM sets ORDER BY released')
 
+    # hack in changes for Planar Chaos' bullshit WRT split cards
+    for a in ['Boom // Bust', 'Dead // Gone', 'Rough // Tumble']:
+        db.dbase.execute('UPDATE cards SET cn_position = 54 WHERE cards.cardname = ?', (a,) )
+
     for exp in setlist:
         # special case for time spiral
         if exp[0] == 'TSP':

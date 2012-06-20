@@ -88,7 +88,8 @@ Legacy:Banned:Gush
 Legacy:Banned:Hermit Druid
 Legacy:Banned:Imperial Seal
 Legacy:Banned:Jeweled Bird
-Legacy:Banned:Land Tax
+#No longer banned as of 2012-JUL-01
+#Legacy:Banned:Land Tax
 Legacy:Banned:Library of Alexandria
 Legacy:Banned:Mana Crypt
 Legacy:Banned:Mana Drain

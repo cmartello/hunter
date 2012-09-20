@@ -79,3 +79,4 @@ Magic 2012:M12:2011-07-15
 Innistrad:ISD:2011-09-30
 Dark Ascension:DKA:2012-02-03
 Avacyn Restored:AVR:2012-05-04
+Magic 2013:M13:2012-07-13

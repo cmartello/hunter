@@ -24,7 +24,8 @@ Vintage:Restricted:Ancestral Recall
 Vintage:Restricted:Balance
 Vintage:Restricted:Black Lotus
 Vintage:Restricted:Brainstorm
-Vintage:Restricted:Burning Wish
+# No longer restricted as of 2012-OCT-1
+#Vintage:Restricted:Burning Wish
 Vintage:Restricted:Channel
 Vintage:Restricted:Demonic Consultation
 Vintage:Restricted:Demonic Tutor
@@ -88,7 +89,7 @@ Legacy:Banned:Gush
 Legacy:Banned:Hermit Druid
 Legacy:Banned:Imperial Seal
 Legacy:Banned:Jeweled Bird
-#No longer banned as of 2012-JUL-01
+#No longer banned as of 2012-JUN-29
 #Legacy:Banned:Land Tax
 Legacy:Banned:Library of Alexandria
 Legacy:Banned:Mana Crypt
@@ -185,7 +186,8 @@ Modern:Banned:Stoneforge Mystic
 Modern:Banned:Sword of the Meek
 Modern:Banned:Tree of Tales
 Modern:Banned:Umezawa's Jitte
-Modern:Banned:Valakut, the Molten Pinnacle
+# Unbanned as of 2012-OCT-01
+#Modern:Banned:Valakut, the Molten Pinnacle
 Modern:Banned:Vault of Whispers
 
 # Modern bans effective 2011-OCT-01

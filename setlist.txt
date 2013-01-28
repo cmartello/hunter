@@ -81,3 +81,4 @@ Dark Ascension:DKA:2012-02-03
 Avacyn Restored:AVR:2012-05-04
 Magic 2013:M13:2012-07-13
 Return to Ravnica:RTR:2012-10-05
+Gatecrash:GTC:2013-02-01

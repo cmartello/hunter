@@ -202,6 +202,10 @@ Modern:Banned:Rite of Flame
 Modern:Banned:Punishing Fire
 Modern:Banned:Wild Nacatl
 
+# Modern bans effective 2013-FEB-01
+Modern:Banned:Bloodbraid Elf
+Modern:Banned:Seething Song
+
 # Extended bans effective 2011-OCT-01
 Extended:Banned:Jace, the Mind Sculptor
 Extended:Banned:Mental Misstep

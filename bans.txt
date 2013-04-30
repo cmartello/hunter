@@ -51,7 +51,8 @@ Vintage:Restricted:Mox Sapphire
 Vintage:Restricted:Mystical Tutor
 Vintage:Restricted:Necropotence
 Vintage:Restricted:Ponder
-Vintage:Restricted:Regrowth
+#Unrestricted as of 2013-MAY-03
+#Vintage:Restricted:Regrowth
 Vintage:Restricted:Sol Ring
 Vintage:Restricted:Strip Mine
 Vintage:Restricted:Thirst for Knowledge
@@ -205,6 +206,9 @@ Modern:Banned:Wild Nacatl
 # Modern bans effective 2013-FEB-01
 Modern:Banned:Bloodbraid Elf
 Modern:Banned:Seething Song
+
+# Modern ban effective 2013-MAY-03
+Modern:Banned:Second Sunrise
 
 # Extended bans effective 2011-OCT-01
 Extended:Banned:Jace, the Mind Sculptor
